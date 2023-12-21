@@ -58,7 +58,17 @@
 <div class="container">
   <!-- Input section -->
   <div class="input-section">
-    <h2>학생 명단을 업로드해주세요 (TXT 파일)</h2>
+    <h2>학생 명단을 업로드해주세요 (TXT 파일) <br>
+    <br>
+    TXT파일 명단 예시<br>
+      <br>
+      설명: 원래반, 이름, 순위, 특이사항번호<br>
+      <br>
+      5, 김가양, 17, 2<br>
+      4, 서가양, 4, 1<br>
+      10, 남가양, 20, 1<br>
+      <br>
+    </h2>
     <input type="file" id="fileInput" accept=".txt">
     <input type="number" id="newClassCount" placeholder="재편성할 반의 수" min="1" style="margin-left: 10px;">
     <button onclick="processFile()" style="margin-left: 10px;">학급 재편성</button>
