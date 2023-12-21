@@ -65,10 +65,10 @@
         <div class="input-section">
             <h2>학생 명단을 업로드해주세요 (TXT 파일) <br><br>
                 TXT파일 명단 예시<br><br>
-                설명: 원래반, 이름, 순위, 특이사항번호<br><br>
-                5, 김가양, 17, 2<br>
-                4, 서가양, 4, 1<br>
-                10, 남가양, 20, 1<br><br>
+                설명: 원래반, 이름, 성별, 순위, 특이사항번호<br><br>
+                5, 김가양, 남, 17, 2<br>
+                4, 서가양, 여, 4, 1<br>
+                10, 남가양, 여, 20, 1<br><br>
             </h2>
             <input type="file" id="fileInput" accept=".txt">
             <input type="number" id="newClassCount" placeholder="재편성할 반의 수" min="1" style="margin-left: 10px;">
@@ -87,64 +87,62 @@
     </footer>
 
     <script>
-        function processFile() {
-            const fileInput = document.getElementById('fileInput');
-            const newClassCount = document.getElementById('newClassCount').value || 1;
-            if (fileInput.files.length == 0) {
-                alert('Please upload a file.');
-                return;
-            }
+function processFile() {
+    // ... existing code ...
+}
 
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const students = parseStudentData(e.target.result);
-                const rearranged = rearrangeStudents(students, newClassCount);
-                displayStudents(rearranged);
-            };
-            reader.readAsText(file);
-        }
+function parseStudentData(data) {
+    return data.trim().split('\n').map(line => {
+        const [currentClass, name, gender, order, special] = line.split(', ');
+        return { currentClass, name, gender, order, special };
+    });
+}
 
-        function parseStudentData(data) {
-            return data.trim().split('\n').map(line => {
-                const [currentClass, name, order, special] = line.split(', ');
-                return { currentClass, name, order, special };
-            });
-        }
+function rearrangeStudents(students, newClassCount) {
+    // Split students into male and female groups
+    const males = students.filter(student => student.gender === '남');
+    const females = students.filter(student => student.gender === '여');
 
-        function rearrangeStudents(students, newClassCount) {
-            students.sort((a, b) => a.name.localeCompare(b.name));
-            const rearranged = [];
-            for (let i = 0; i < students.length; i++) {
-                const newClass = (i % newClassCount) + 1;
-                rearranged.push({ ...students[i], newClass });
-            }
-            return rearranged;
-        }
+    // Sort each group
+    males.sort((a, b) => a.name.localeCompare(b.name));
+    females.sort((a, b) => a.name.localeCompare(b.name));
 
-        function displayStudents(students) {
-            const studentListDiv = document.getElementById('studentList');
-            studentListDiv.innerHTML = createTable(students);
-        }
+    // Distribute students evenly across classes
+    const rearranged = [];
+    for (let i = 0; i < students.length; i++) {
+        const newClass = (i % newClassCount) + 1;
+        const student = i % 2 === 0 && females.length ? females.shift() : males.shift();
+        rearranged.push({ ...student, newClass });
+    }
+    return rearranged;
+}
 
-        function createTable(students) {
-            const classes = Array.from(new Set(students.map(s => s.newClass)));
-            let tableHtml = '<table>';
-            classes.forEach(c => {
-                tableHtml += `<tr><th colspan="4">Class ${c}</th></tr>`;
-                tableHtml += '<tr><th>Original Class</th><th>Name</th><th>Order</th><th>Special</th></tr>';
-                students.filter(s => s.newClass == c).forEach(s => {
-                    tableHtml += `<tr>
-                                    <td>${s.currentClass}</td>
-                                    <td>${s.name}</td>
-                                    <td>${s.order}</td>
-                                    <td>${s.special}</td>
-                                  </tr>`;
-                });
-            });
-            tableHtml += '</table>';
-            return tableHtml;
-        }
+function displayStudents(students) {
+    // ... existing code, update to display gender ...
+    const studentListDiv = document.getElementById('studentList');
+    studentListDiv.innerHTML = createTable(students);
+}
+
+function createTable(students) {
+    const classes = Array.from(new Set(students.map(s => s.newClass)));
+    let tableHtml = '<table>';
+    classes.forEach(c => {
+        tableHtml += `<tr><th colspan="5">Class ${c}</th></tr>`;
+        tableHtml += '<tr><th>Original Class</th><th>Name</th><th>Gender</th><th>Order</th><th>Special</th></tr>';
+        students.filter(s => s.newClass == c).forEach(s => {
+            tableHtml += `<tr>
+                            <td>${s.currentClass}</td>
+                            <td>${s.name}</td>
+                            <td>${s.gender}</td>
+                            <td>${s.order}</td>
+                            <td>${s.special}</td>
+                          </tr>`;
+        });
+    });
+    tableHtml += '</table>';
+    return tableHtml;
+}
+
     </script>
 </body>
 </html>
