@@ -23,12 +23,17 @@ function parseCSV(text) {
     const headers = lines[0].split(',');
     return lines.slice(1).map(line => {
         const data = line.split(',');
+        // 빈 행을 건너뛰기 위한 조건
+        if (data.length === 1 && data[0].trim() === '') {
+            return null;
+        }
         const obj = {};
         headers.forEach((header, index) => {
-            obj[header.trim()] = data[index].trim();
+            // 셀 데이터가 없는 경우를 처리
+            obj[header.trim()] = data[index] ? data[index].trim() : '';
         });
         return obj;
-    });
+    }).filter(row => row !== null); // 빈 행 제거
 }
 
 function displayResults(classAssignments) {
