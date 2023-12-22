@@ -43,10 +43,10 @@
             // 학생 데이터를 기반으로 초기 반 편성
             var initialClassAssignments = initialAssignStudents(data, numClasses);
         
-            // 이전 반 정보를 고려하여 재배치
-            var reassignedClasses = minimizeSameClassStudents(initialClassAssignments, data);
+            // 성적 분산 최대화를 위한 재배치
+            var optimizedClasses = maximizeScoreDiversity(initialClassAssignments, data);
         
-            return reassignedClasses;
+            return optimizedClasses;
         }
         
         function initialAssignStudents(data, numClasses) {
@@ -54,12 +54,12 @@
             // 남녀 성비 및 기타 기준을 고려
         }
         
-        function minimizeSameClassStudents(initialClassAssignments, data) {
+        function maximizeScoreDiversity(initialClassAssignments, data) {
             // initialClassAssignments는 초기 반 할당 정보
             // data는 전체 학생 데이터
         
-            // 각 학생의 이전 반 정보를 확인하고, 새로운 반에 배치
-            // 이전 반과 다른 반에 배치하도록 로직 구현
+            // 각 반의 남녀별 성적 분산을 최대화하도록 학생 재배치
+            // 성별 및 성적 순위 정보를 활용하여 각 반의 성적 분포 다양화
             // 이 과정에서 반별 학생 수 및 성비를 고려
         }
         
