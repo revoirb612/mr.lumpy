@@ -1,19 +1,34 @@
-function processData() {
-    var input = document.getElementById("dataInput").value;
-    var lines = input.split('\n');
+function uploadAndProcess() {
+    var fileInput = document.getElementById('fileInput');
+    var file = fileInput.files[0];
     
-    // 여기서 데이터 처리 및 학급 편성 로직 구현
-    var result = ""; // 결과를 문자열로 저장
+    if (file) {
+        var reader = new FileReader();
+        reader.readAsText(file, 'UTF-8');
+        reader.onload = function(e) {
+            var content = e.target.result;
+            processData(content);
+        };
+        reader.onerror = function(e) {
+            document.getElementById('result').innerHTML = '파일 읽기 오류!';
+        };
+    } else {
+        document.getElementById('result').innerHTML = '파일을 선택해주세요.';
+    }
+}
+
+function processData(content) {
+    var lines = content.split('\n');
+    
+    // 데이터 처리 및 학급 편성 로직
+    var result = "";
     for (var i = 0; i < lines.length; i++) {
-        // 각 라인의 데이터 처리
         var lineData = lines[i].split(',');
-        // 학급 편성 로직 (예: 성별, 학년, 반 별로 그룹화)
+        // 여기서 학급 편성 로직 구현
         // ...
 
-        // 결과를 result 문자열에 추가
         result += "Processed Line: " + lines[i] + "<br>";
     }
 
-    // 결과를 HTML 페이지에 출력
-    document.getElementById("result").innerHTML = result;
+    document.getElementById('result').innerHTML = result;
 }
