@@ -1,20 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>학급 편성 프로그램</title>
+    <title>Class Reassignment Tool</title>
 </head>
 <body>
-    <h2>학급 편성 프로그램</h2>
+    <h1>Class Reassignment Tool</h1>
+    
+    <form id="uploadForm">
+        <input type="file" id="csvFile" accept=".csv" required>
+        <br>
+        <label for="numClasses">Number of Classes:</label>
+        <input type="number" id="numClasses" name="numClasses" min="1" required>
+        <br>
+        <input type="submit" value="Upload and Reassign Classes">
+    </form>
 
-    <!-- 파일 업로드 폼 -->
-    <input type="file" id="fileInput" accept=".csv">
-    <!-- 학반 수 입력 -->
-    <input type="number" id="classCount" placeholder="진급 학반 수">
-    <button onclick="uploadAndProcess()">업로드 및 편성 시작</button>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var numClasses = document.getElementById('numClasses').value;
+            var file = document.getElementById('csvFile').files[0];
+            var reader = new FileReader();
 
-    <h3>편성 결과:</h3>
-    <div id="result"></div>
+            reader.onload = function(e) {
+                var text = e.target.result;
+                var data = parseCSV(text);
+                // Reassign students to classes based on the input number of classes
+                // and the parsed data from the CSV file
+                var reassignedClasses = reassignClasses(data, numClasses);
+                // Display or process the reassigned classes
+            };
 
-    <script src="script.js"></script>
+            reader.readAsText(file);
+        });
+
+        function parseCSV(text) {
+            // Parse the CSV data and return an array of objects
+        }
+
+        function reassignClasses(data, numClasses) {
+            // Logic to reassign students to classes
+            // Return the reassigned class data
+        }
+    </script>
 </body>
 </html>
