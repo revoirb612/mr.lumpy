@@ -1,34 +1,41 @@
-function uploadAndProcess() {
-    var fileInput = document.getElementById('fileInput');
-    var file = fileInput.files[0];
+document.getElementById('uploadForm').addEventListener('submit', function(event) {
+    event.preventDefault();
     
-    if (file) {
-        var reader = new FileReader();
-        reader.readAsText(file, 'UTF-8');
-        reader.onload = function(e) {
-            var content = e.target.result;
-            processData(content);
-        };
-        reader.onerror = function(e) {
-            document.getElementById('result').innerHTML = '파일 읽기 오류!';
-        };
-    } else {
-        document.getElementById('result').innerHTML = '파일을 선택해주세요.';
-    }
+    var numClasses = document.getElementById('numClasses').value;
+    var file = document.getElementById('csvFile').files[0];
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+        var text = e.target.result;
+        var data = parseCSV(text);
+        var initialClassAssignments = initialAssignStudents(data, numClasses);
+        var optimizedClasses = balanceGuidanceDifficulty(maximizeScoreDiversity(minimizeSameClassStudents(initialClassAssignments)));
+        displayResults(optimizedClasses);
+    };
+
+    reader.readAsText(file);
+});
+
+function parseCSV(text) {
+    // CSV 파싱 로직
 }
 
-function processData(content) {
-    var lines = content.split('\n');
-    
-    // 데이터 처리 및 학급 편성 로직
-    var result = "";
-    for (var i = 0; i < lines.length; i++) {
-        var lineData = lines[i].split(',');
-        // 여기서 학급 편성 로직 구현
-        // ...
+function initialAssignStudents(data, numClasses) {
+    // 학생들을 초기 반에 임시 할당하는 로직
+}
 
-        result += "Processed Line: " + lines[i] + "<br>";
-    }
+function minimizeSameClassStudents(classAssignments) {
+    // 동일한 학반에서 온 학생 수 최소화 로직
+}
 
-    document.getElementById('result').innerHTML = result;
+function maximizeScoreDiversity(classAssignments) {
+    // 성적 분산 최대화 로직
+}
+
+function balanceGuidanceDifficulty(classAssignments) {
+    // 지도곤란도 균등화 로직
+}
+
+function displayResults(classAssignments) {
+    // 결과 출력 로직
 }
