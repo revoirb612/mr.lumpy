@@ -43,8 +43,8 @@
             // 학생 데이터를 기반으로 초기 반 편성
             var initialClassAssignments = initialAssignStudents(data, numClasses);
         
-            // 성적 분산 최대화를 위한 재배치
-            var optimizedClasses = maximizeScoreDiversity(initialClassAssignments, data);
+            // 지도곤란도 분산 최대화를 위한 재배치
+            var optimizedClasses = balanceGuidanceDifficulty(initialClassAssignments, data);
         
             return optimizedClasses;
         }
@@ -54,12 +54,12 @@
             // 남녀 성비 및 기타 기준을 고려
         }
         
-        function maximizeScoreDiversity(initialClassAssignments, data) {
+        function balanceGuidanceDifficulty(initialClassAssignments, data) {
             // initialClassAssignments는 초기 반 할당 정보
             // data는 전체 학생 데이터
         
-            // 각 반의 남녀별 성적 분산을 최대화하도록 학생 재배치
-            // 성별 및 성적 순위 정보를 활용하여 각 반의 성적 분포 다양화
+            // 각 반의 지도곤란도 총합을 균등하게 하도록 학생 재배치
+            // 각 학생의 지도곤란도 점수를 고려하여 각 반의 지도 난이도 균등화
             // 이 과정에서 반별 학생 수 및 성비를 고려
         }
         
