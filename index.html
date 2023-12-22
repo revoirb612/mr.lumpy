@@ -1,110 +1,23 @@
-
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>새학년 학급 재배치 프로그램</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            text-align: center;
-        }
-        #fileInput, #classCountInput {
-            margin: 20px 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+    <title>학급 편성 프로그램</title>
 </head>
 <body>
-    <div class="container">
-        <h1>새학년 학급 재배치 프로그램</h1>
-        <input type="file" id="fileInput" accept=".csv">
-        <br>
-        <label for="classCountInput">재배치 할 학급 수: </label>
-        <input type="number" id="classCountInput" min="1" value="1">
-        <br>
-        <button onclick="reshuffle()">재배치 시작</button>
-        <div id="output"></div>
-    </div>
-    <script>
-        function parseCSV(text) {
-            const lines = text.split("\n");
-            return lines.map(line => line.split(","));
-        }
+    <h2>학급 편성 프로그램</h2>
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
+    <textarea id="dataInput" rows="10" cols="50">
+ID,학년,반,번호,성별,이름,학급내성별석차,지도곤란도,비고
+1,1,1,1,남,김학생,1,낮음,
+2,1,1,2,여,이학생,1,높음,
+... (더 많은 데이터)
+    </textarea>
 
-        function calculateDifficultyAverage(students) {
-            const totalDifficulty = students.reduce((acc, student) => acc + parseFloat(student[3]), 0);
-            return totalDifficulty / students.length;
-        }
+    <button onclick="processData()">편성 시작</button>
 
-        function reshuffle() {
-            const fileInput = document.getElementById('fileInput');
-            const classCount = parseInt(document.getElementById('classCountInput').value) || 1;
-            const file = fileInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    let students = parseCSV(e.target.result);
-                    shuffleArray(students); // Randomize order to avoid bias
-                    
-                    // Create classes array
-                    let classes = Array.from({length: classCount}, () => []);
-                    let classIndex = 0;
-                    
-                    // Distribute students
-                    students.forEach(student => {
-                        classes[classIndex].push(student);
-                        classIndex = (classIndex + 1) % classCount;
-                    });
+    <h3>편성 결과:</h3>
+    <div id="result"></div>
 
-                    // Adjust for gender balance and difficulty
-                    balanceClasses(classes);
-                    displayResults(classes);
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        function balanceClasses(classes) {
-            // Placeholder function for balancing logic
-            // Implement gender balance, difficulty average, and other criteria here
-        }
-
-        function displayResults(classes) {
-            let output = "";
-            classes.forEach((classStudents, index) => {
-                output += "<h2>학급 " + (index + 1) + "</h2>";
-                output += "<table><tr><th>원래 반</th><th>이름</th><th>성별</th><th>난도</th><th>특이사항</th></tr>";
-                classStudents.forEach(student => {
-                    output += "<tr><td>" + student.join("</td><td>") + "</td></tr>";
-                });
-                output += "</table>";
-            });
-            document.getElementById('output').innerHTML = output;
-        }
-    </script>
+    <script src="your-script.js"></script>
 </body>
 </html>
