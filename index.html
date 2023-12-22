@@ -40,9 +40,30 @@
         }
 
         function reassignClasses(data, numClasses) {
-            // Logic to reassign students to classes
-            // Return the reassigned class data
+            // 학생 데이터를 기반으로 초기 반 편성
+            var initialClassAssignments = initialAssignStudents(data, numClasses);
+        
+            // 이전 반 정보를 고려하여 재배치
+            var reassignedClasses = minimizeSameClassStudents(initialClassAssignments, data);
+        
+            return reassignedClasses;
         }
+        
+        function initialAssignStudents(data, numClasses) {
+            // 데이터를 받아서 초기에 학생들을 임시로 반에 할당하는 로직
+            // 남녀 성비 및 기타 기준을 고려
+        }
+        
+        function minimizeSameClassStudents(initialClassAssignments, data) {
+            // initialClassAssignments는 초기 반 할당 정보
+            // data는 전체 학생 데이터
+        
+            // 각 학생의 이전 반 정보를 확인하고, 새로운 반에 배치
+            // 이전 반과 다른 반에 배치하도록 로직 구현
+            // 이 과정에서 반별 학생 수 및 성비를 고려
+        }
+        
+        // 나머지 코드...
     </script>
 </body>
 </html>
