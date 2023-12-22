@@ -6,18 +6,13 @@
 <body>
     <h2>학급 편성 프로그램</h2>
 
-    <textarea id="dataInput" rows="10" cols="50">
-ID,학년,반,번호,성별,이름,학급내성별석차,지도곤란도,비고
-1,1,1,1,남,김학생,1,낮음,
-2,1,1,2,여,이학생,1,높음,
-... (더 많은 데이터)
-    </textarea>
-
-    <button onclick="processData()">편성 시작</button>
+    <!-- 파일 업로드 폼 -->
+    <input type="file" id="fileInput" accept=".csv">
+    <button onclick="uploadAndProcess()">업로드 및 편성 시작</button>
 
     <h3>편성 결과:</h3>
     <div id="result"></div>
 
-    <script src="your-script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
