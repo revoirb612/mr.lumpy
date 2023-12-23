@@ -1,25 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>Class Reassignment Tool</title>
-    <script src="dataProcessing.js"></script>
-    <style>
-        /* 여기에 필요한 CSS 스타일을 추가하세요 */
-    </style>
+    <meta charset="UTF-8">
+    <title>CSV 파일에서 데이터 읽기</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <!-- 추가 스타일링 -->
 </head>
 <body>
-    <h1>Class Reassignment Tool</h1>
-    
-    <form id="uploadForm">
-        <input type="file" id="csvFile" accept=".csv" required>
-        <br>
-        <label for="numClasses">Number of Classes:</label>
-        <input type="number" id="numClasses" name="numClasses" min="1" required>
-        <br>
-        <input type="submit" value="Upload and Reassign Classes">
-    </form>
+    <h2>CSV 파일에서 데이터 읽기</h2>
+    <input type="file" id="csvFileInput" accept=".csv" onchange="readCSV(event)">
+    <br><br>
+    <table id="dataTable">
+        <!-- 테이블 헤더 -->
+    </table>
 
-    <div id="output"></div>
-    <script src="main.js"></script>
+    <script>
+        function readCSV(event) {
+            const file = event.target.files[0];
+            Papa.parse(file, {
+                complete: function(results) {
+                    const data = results.data;
+                    const table = document.getElementById('dataTable');
+                    table.innerHTML = "";
+
+                    // 헤더 추가
+                    let thead = table.createTHead();
+                    let row = thead.insertRow();
+                    for (let key of data[0]) {
+                        let th = document.createElement("th");
+                        th.innerText = key;
+                        row.appendChild(th);
+                    }
+
+                    // 데이터 행 추가
+                    for (let i = 1; i < data.length; i++) {
+                        let row = table.insertRow();
+                        for (let j = 0; j < data[i].length; j++) {
+                            let cell = row.insertCell();
+                            cell.innerText = data[i][j];
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
