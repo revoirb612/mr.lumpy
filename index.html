@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>CSV 파일에서 데이터 읽기</title>
+    <title>CSV 파일 분석</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <!-- 추가 스타일링 -->
 </head>
@@ -13,6 +13,10 @@
     <table id="dataTable">
         <!-- 테이블 헤더 -->
     </table>
+    <br>
+    <div id="uniqueCounts">
+        <!-- 여기에 유니크한 값의 개수를 표시 -->
+    </div>
 
     <script>
         function readCSV(event) {
@@ -20,28 +24,51 @@
             Papa.parse(file, {
                 complete: function(results) {
                     const data = results.data;
-                    const table = document.getElementById('dataTable');
-                    table.innerHTML = "";
-
-                    // 헤더 추가
-                    let thead = table.createTHead();
-                    let row = thead.insertRow();
-                    for (let key of data[0]) {
-                        let th = document.createElement("th");
-                        th.innerText = key;
-                        row.appendChild(th);
-                    }
-
-                    // 데이터 행 추가
-                    for (let i = 1; i < data.length; i++) {
-                        let row = table.insertRow();
-                        for (let j = 0; j < data[i].length; j++) {
-                            let cell = row.insertCell();
-                            cell.innerText = data[i][j];
-                        }
-                    }
+                    displayTable(data);
+                    displayUniqueCounts(data);
                 }
             });
+        }
+
+        function displayTable(data) {
+            const table = document.getElementById('dataTable');
+            table.innerHTML = "";
+
+            // 헤더 추가
+            let thead = table.createTHead();
+            let row = thead.insertRow();
+            for (let key of data[0]) {
+                let th = document.createElement("th");
+                th.innerText = key;
+                row.appendChild(th);
+            }
+
+            // 데이터 행 추가
+            for (let i = 1; i < data.length; i++) {
+                let row = table.insertRow();
+                for (let j = 0; j < data[i].length; j++) {
+                    let cell = row.insertCell();
+                    cell.innerText = data[i][j];
+                }
+            }
+        }
+
+        function displayUniqueCounts(data) {
+            let uniqueCounts = {};
+            let headers = data[0];
+
+            // 각 헤더에 대한 유니크한 값의 개수 계산
+            for (let i = 0; i < headers.length; i++) {
+                let columnData = data.map(row => row[i]);
+                uniqueCounts[headers[i]] = new Set(columnData.slice(1)).size;
+            }
+
+            // 결과 표시
+            const uniqueCountsDiv = document.getElementById('uniqueCounts');
+            uniqueCountsDiv.innerHTML = "<h3>유니크한 값의 개수:</h3>";
+            for (let key in uniqueCounts) {
+                uniqueCountsDiv.innerHTML += `<p>${key}: ${uniqueCounts[key]}</p>`;
+            }
         }
     </script>
 </body>
