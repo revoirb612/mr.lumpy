@@ -1,6 +1,7 @@
 let originalData = []; // 원본 데이터 저장을 위한 변수
 let randomizedData = []; // 랜덤화된 데이터 저장을 위한 변수
 let currentSeed = 0; // 현재 사용된 랜덤 시드
+let numberOfGroups = 0; 
 
 function handleFiles(files) {
     if (files.length) {
@@ -9,6 +10,10 @@ function handleFiles(files) {
             complete: function(results) {
                 originalData = preprocessData(results.data);
                 createTable(originalData);
+              
+                // analyzeUniqueDataCount 함수 호출
+                let uniqueCounts = analyzeUniqueDataCount(originalData);
+                displayUniqueDataCounts(uniqueCounts); // 결과 표시 함수 호출                
             }
         });
     }
@@ -22,6 +27,11 @@ function preprocessData(data) {
     return filteredData.map((row, index) => {
         return { ID: index + 1, ...row };
     });
+}
+
+function setGroupCount() {
+  numberOfGroups = document.getElementById('groupCount').value;
+  document.getElementById('inputGroupCount').textContent = numberOfGroups;
 }
 
 function createTable(data) {
@@ -82,12 +92,20 @@ function shuffleArray(array) {
 
 function analyzeUniqueDataCount(data) {
     let uniqueCounts = {};
+    let genderCounts = { '남': 0, '여': 0 }; // 성별 카운트를 위한 객체 추가
+
     data.forEach(row => {
         Object.keys(row).forEach(key => {
             if (!uniqueCounts[key]) {
                 uniqueCounts[key] = new Set();
             }
             uniqueCounts[key].add(row[key]);
+
+            // 성별 카운트 업데이트
+            if (key === '성별') {
+                if (row[key] === '남') genderCounts['남']++;
+                else if (row[key] === '여') genderCounts['여']++;
+            }
         });
     });
 
@@ -96,5 +114,75 @@ function analyzeUniqueDataCount(data) {
         uniqueCounts[key] = uniqueCounts[key].size;
     });
 
+    // 성별 카운트 정보 추가
+    uniqueCounts['성별_남'] = genderCounts['남'];
+    uniqueCounts['성별_여'] = genderCounts['여'];
+
     return uniqueCounts;
+}
+
+function displayUniqueDataCounts(counts) {
+    let resultsContainer = document.getElementById('uniqueCountsContainer');
+    resultsContainer.innerHTML = ''; // 이전 내용 초기화
+    Object.keys(counts).forEach(key => {
+        let p = document.createElement('p');
+        p.textContent = key.includes('성별_') ? `성별 - ${key.split('_')[1]}: ${counts[key]}` : `${key}: ${counts[key]}`;
+        resultsContainer.appendChild(p);
+    });
+}
+
+function calculateGroupDataCounts() {
+    numberOfGroups = parseInt(numberOfGroups);
+    if (numberOfGroups <= 0 || isNaN(numberOfGroups)) {
+        alert('유효한 그룹 수를 입력해주세요.');
+        return;
+    }
+
+    let maleData = originalData.filter(row => row['성별'] === '남');
+    let femaleData = originalData.filter(row => row['성별'] === '여');
+
+    let totalMaleCount = maleData.length;
+    let totalFemaleCount = femaleData.length;
+    let totalDataCount = originalData.length;
+
+    let idealMalePerGroup = Math.round(totalMaleCount / numberOfGroups);
+    let idealFemalePerGroup = Math.round(totalFemaleCount / numberOfGroups);
+
+    let groups = Array.from({ length: numberOfGroups }, () => ({ male: [], female: [], total: 0 }));
+
+    // 남성과 여성을 번갈아가며 그룹에 할당
+    let maleIndex = 0, femaleIndex = 0;
+    for (let i = 0; i < totalDataCount; i++) {
+        let groupIndex = i % numberOfGroups;
+        if (groups[groupIndex].male.length < idealMalePerGroup && maleIndex < totalMaleCount) {
+            groups[groupIndex].male.push(maleData[maleIndex]);
+            groups[groupIndex].total++;
+            maleIndex++;
+        } else if (femaleIndex < totalFemaleCount) {
+            groups[groupIndex].female.push(femaleData[femaleIndex]);
+            groups[groupIndex].total++;
+            femaleIndex++;
+        }
+    }
+
+    // 결과를 저장하기 위한 추가된 코드
+    for (let i = 0; i < numberOfGroups; i++) {
+        // 남성과 여성 데이터를 혼합
+        groups[i] = groups[i].male.concat(groups[i].female);
+    }
+
+    displayGroupDataCounts(groups);
+}
+
+// 변경된 displayGroupDataCounts 함수
+function displayGroupDataCounts(groupCounts) {
+    console.log(groupCounts); // 여기에 추가
+  
+    let resultsContainer = document.getElementById('groupCountsContainer');
+    resultsContainer.innerHTML = ''; // 이전 내용 초기화
+    groupCounts.forEach((group, index) => {
+        let p = document.createElement('p');
+        p.textContent = `Group ${index + 1}: 총 ${group.length} (남: ${group.filter(row => row['성별'] === '남').length}, 여: ${group.filter(row => row['성별'] === '여').length})`;
+        resultsContainer.appendChild(p);
+    });
 }
