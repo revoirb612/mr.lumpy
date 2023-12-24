@@ -2,10 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>CSV to Table with Data Analysis</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <title>CSV to Table with Separate Random Data</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
     <script src="script.js"></script>
@@ -13,21 +10,13 @@
 </head>
 <body>
 
-    <!-- 파일 업로드 입력 -->
-    <input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
-
-    <!-- 랜덤 시드 입력 -->
-    <input type="number" id="seedInput" placeholder="랜덤 시드 입력">
-
-    <!-- 셔플 및 초기화 버튼 -->
-    <button onclick="shuffleDataWithSeed()">셔플</button>
-    <button onclick="resetTable()">초기화</button>
-
-    <!-- 사용된 랜덤 시드 표시 -->
-    <p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
-
-    <!-- 데이터 테이블 컨테이너 -->
-    <div id="tableContainer"></div>
+<input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
+<input type="number" id="seedInput" placeholder="랜덤 시드 입력">
+<button onclick="shuffleDataWithSeed()">셔플</button>
+<button onclick="resetTable()">초기화</button>
+<p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
+<br>
+<div id="tableContainer"></div>
 
 </body>
 </html>
