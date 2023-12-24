@@ -9,6 +9,7 @@ function handleFiles(files) {
             complete: function(results) {
                 originalData = preprocessData(results.data);
                 createTable(originalData);
+                populateGroupSelect(Object.keys(originalData[0])); // 드롭다운에 헤더 옵션 추가
             }
         });
     }
@@ -78,19 +79,6 @@ function shuffleArray(array) {
     }
 
     return array;
-}
-
-function handleFiles(files) {
-    if (files.length) {
-        Papa.parse(files[0], {
-            header: true,
-            complete: function(results) {
-                originalData = preprocessData(results.data);
-                createTable(originalData);
-                populateGroupSelect(Object.keys(originalData[0]));
-            }
-        });
-    }
 }
 
 function populateGroupSelect(headers) {
