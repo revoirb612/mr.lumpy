@@ -28,12 +28,15 @@ function calculateGroupVariance(data, groupHeader) {
         }
 
         Object.keys(row).forEach(header => {
-            if (header !== groupHeader && !isNaN(row[header])) {
-                if (!groupSummaries[groupKey][header]) {
-                    groupSummaries[groupKey][header] = { sum: 0, count: 0, variance: 0 };
+            if (header !== groupHeader) {
+                const value = parseFloat(row[header]);
+                if (!isNaN(value)) {
+                    if (!groupSummaries[groupKey][header]) {
+                        groupSummaries[groupKey][header] = { sum: 0, count: 0, varianceSum: 0 };
+                    }
+                    groupSummaries[groupKey][header].sum += value;
+                    groupSummaries[groupKey][header].count += 1;
                 }
-                groupSummaries[groupKey][header].sum += parseFloat(row[header]);
-                groupSummaries[groupKey][header].count += 1;
             }
         });
     });
@@ -41,19 +44,21 @@ function calculateGroupVariance(data, groupHeader) {
     // 각 그룹별로 분산을 계산
     Object.keys(groupSummaries).forEach(groupKey => {
         Object.keys(groupSummaries[groupKey]).forEach(header => {
-            let mean = groupSummaries[groupKey][header].sum / groupSummaries[groupKey][header].count;
-            let varianceSum = 0;
+            const groupData = groupSummaries[groupKey][header];
+            const mean = groupData.sum / groupData.count;
 
             data.forEach(row => {
                 if (row[groupHeader] === groupKey) {
-                    varianceSum += (parseFloat(row[header]) - mean) ** 2;
+                    const value = parseFloat(row[header]);
+                    if (!isNaN(value)) {
+                        groupData.varianceSum += (value - mean) ** 2;
+                    }
                 }
             });
 
-            groupSummaries[groupKey][header].variance = varianceSum / groupSummaries[groupKey][header].count;
+            groupSummaries[groupKey][header].variance = groupData.varianceSum / groupData.count;
         });
     });
 
     return groupSummaries;
 }
-
