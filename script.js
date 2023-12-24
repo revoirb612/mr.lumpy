@@ -9,7 +9,7 @@ function handleFiles(files) {
             complete: function(results) {
                 originalData = preprocessData(results.data);
                 createTable(originalData);
-                populateGroupSelect(Object.keys(originalData[0])); // 드롭다운에 헤더 옵션 추가
+                populateGroupSelect(Object.keys(originalData[0])); // 드롭다운 옵션 추가
             }
         });
     }
