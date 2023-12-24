@@ -18,50 +18,42 @@ function analyzeUniqueDataCount(data) {
 }
 
 function calculateGroupVariance(data, groupHeader) {
-    // 그룹별로 데이터를 저장할 객체
-    let groups = {};
+    let groupSummaries = {};
 
-    // 데이터를 그룹화
+    // 데이터를 그룹화하고 각 그룹별로 합계와 카운트를 계산
     data.forEach(row => {
-        let key = row[groupHeader];
-        if (!groups[key]) {
-            groups[key] = [];
+        const groupKey = row[groupHeader];
+        if (!groupSummaries[groupKey]) {
+            groupSummaries[groupKey] = {};
         }
-        groups[key].push(row);
+
+        Object.keys(row).forEach(header => {
+            if (header !== groupHeader && !isNaN(row[header])) {
+                if (!groupSummaries[groupKey][header]) {
+                    groupSummaries[groupKey][header] = { sum: 0, count: 0, variance: 0 };
+                }
+                groupSummaries[groupKey][header].sum += parseFloat(row[header]);
+                groupSummaries[groupKey][header].count += 1;
+            }
+        });
     });
 
-    // 각 그룹별 분산 계산
-    let variances = {};
-    for (let key in groups) {
-        let group = groups[key];
-        let sum = 0;
-        let count = 0;
+    // 각 그룹별로 분산을 계산
+    Object.keys(groupSummaries).forEach(groupKey => {
+        Object.keys(groupSummaries[groupKey]).forEach(header => {
+            let mean = groupSummaries[groupKey][header].sum / groupSummaries[groupKey][header].count;
+            let varianceSum = 0;
 
-        // 평균 계산
-        group.forEach(row => {
-            Object.keys(row).forEach(header => {
-                if (!isNaN(row[header])) {
-                    sum += parseFloat(row[header]);
-                    count++;
+            data.forEach(row => {
+                if (row[groupHeader] === groupKey) {
+                    varianceSum += (parseFloat(row[header]) - mean) ** 2;
                 }
             });
+
+            groupSummaries[groupKey][header].variance = varianceSum / groupSummaries[groupKey][header].count;
         });
+    });
 
-        let mean = sum / count;
-
-        // 분산 계산
-        let varianceSum = 0;
-        group.forEach(row => {
-            Object.keys(row).forEach(header => {
-                if (!isNaN(row[header])) {
-                    let value = parseFloat(row[header]);
-                    varianceSum += (value - mean) ** 2;
-                }
-            });
-        });
-
-        variances[key] = varianceSum / count;
-    }
-
-    return variances;
+    return groupSummaries;
 }
+
