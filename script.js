@@ -93,28 +93,15 @@ function populateGroupSelect(headers) {
 function calculateVariance(selectedHeader) {
     let groupVariances = calculateGroupVariance(originalData, selectedHeader);
 
-    // 결과를 테이블 데이터로 변환
-    let tableData = [];
-    Object.keys(groupVariances).forEach(group => {
-        Object.keys(groupVariances[group]).forEach(header => {
-            tableData.push({
-                'Group': group,
-                'Header': header,
-                'Variance': groupVariances[group][header].variance.toFixed(2)
-            });
-        });
-    });
+    // 결과를 문자열로 변환하여 표시
+    let resultString = '';
+    for (let group in groupVariances) {
+        for (let header in groupVariances[group]) {
+            let variance = groupVariances[group][header].variance;
+            resultString += `${group} - ${header}: 분산 = ${variance.toFixed(2)}\n`;
+        }
+    }
 
-    // 결과 테이블 생성
-    $('#varianceResult').html('<table id="varianceTable" class="display" width="100%"></table>');
-
-    // DataTables 초기화
-    $('#varianceTable').DataTable({
-        data: tableData,
-        columns: [
-            { title: "Group", data: "Group" },
-            { title: "Header", data: "Header" },
-            { title: "Variance", data: "Variance" }
-        ]
-    });
+    // 결과를 HTML 요소에 표시
+    document.getElementById('varianceResult').textContent = resultString;
 }
