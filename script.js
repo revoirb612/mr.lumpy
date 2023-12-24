@@ -16,12 +16,16 @@ function handleFiles(files) {
 }
 
 function preprocessData(data) {
-    // 비어 있는 행 제거
+    // 비어 있는 행 제거 및 데이터 형 변환
     let filteredData = data.filter(row => Object.values(row).some(val => val.trim() !== ''));
 
-    // 맨 왼쪽 열에 ID 열 추가하여 행번호 입력
     return filteredData.map((row, index) => {
-        return { ID: index + 1, ...row };
+        let processedRow = { ID: index + 1 };
+        Object.keys(row).forEach(key => {
+            // 숫자로 변환 가능한 경우 숫자로 변환
+            processedRow[key] = isNaN(row[key]) ? row[key] : parseFloat(row[key]);
+        });
+        return processedRow;
     });
 }
 
