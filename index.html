@@ -8,14 +8,23 @@
     <script src="script.js"></script>
 </head>
 <body>
-
-<input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
-<input type="number" id="seedInput" placeholder="랜덤 시드 입력">
-<button onclick="shuffleDataWithSeed()">셔플</button>
-<button onclick="resetTable()">초기화</button>
-<p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
-<br>
-<div id="tableContainer"></div>
-
+  <div>
+    <button onclick="resetTable()">초기화</button>
+    <input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
+  </div>
+  <div>
+    <input type="number" id="groupCount" />
+    <button onclick="setGroupCount()">Submit</button>
+    <button onclick="calculateGroupDataCounts()">그룹 데이터 수 계산</button> <!-- 새로운 버튼 추가 -->
+    <p>입력된 그룹 수: <span id="inputGroupCount"></span></p>
+  </div>
+  <div>
+    <input type="number" id="seedInput" placeholder="랜덤 시드 입력">
+    <button onclick="shuffleDataWithSeed()">셔플</button>
+    <p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
+  </div>
+  <div id="uniqueCountsContainer"></div>
+  <div id="groupCountsContainer"></div> <!-- 결과를 표시할 div 추가 -->
+  <div id="tableContainer"></div>
 </body>
 </html>
