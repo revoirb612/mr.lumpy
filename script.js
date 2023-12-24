@@ -9,7 +9,6 @@ function handleFiles(files) {
             complete: function(results) {
                 originalData = preprocessData(results.data);
                 createTable(originalData);
-                populateGroupSelect(Object.keys(originalData[0])); // 드롭다운 옵션 추가
             }
         });
     }
@@ -83,25 +82,4 @@ function shuffleArray(array) {
     }
 
     return array;
-}
-
-function populateGroupSelect(headers) {
-    const select = document.getElementById('groupSelect');
-    select.innerHTML = headers.map(header => `<option value="${header}">${header}</option>`).join('');
-}
-
-function calculateVariance(selectedHeader) {
-    let groupVariances = calculateGroupVariance(originalData, selectedHeader);
-
-    // 결과를 문자열로 변환하여 표시
-    let resultString = '';
-    for (let group in groupVariances) {
-        for (let header in groupVariances[group]) {
-            let variance = groupVariances[group][header].variance;
-            resultString += `${group} - ${header}: 분산 = ${variance.toFixed(2)}\n`;
-        }
-    }
-
-    // 결과를 HTML 요소에 표시
-    document.getElementById('varianceResult').textContent = resultString;
 }
