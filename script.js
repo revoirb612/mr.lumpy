@@ -79,3 +79,35 @@ function shuffleArray(array) {
 
     return array;
 }
+
+function handleFiles(files) {
+    if (files.length) {
+        Papa.parse(files[0], {
+            header: true,
+            complete: function(results) {
+                originalData = preprocessData(results.data);
+                createTable(originalData);
+                populateGroupSelect(Object.keys(originalData[0]));
+            }
+        });
+    }
+}
+
+function populateGroupSelect(headers) {
+    const select = document.getElementById('groupSelect');
+    select.innerHTML = headers.map(header => `<option value="${header}">${header}</option>`).join('');
+}
+
+function calculateVariance(selectedHeader) {
+    // calculateGroupVariance 함수를 호출하여 분산 계산
+    let groupVariances = calculateGroupVariance(originalData, selectedHeader);
+
+    // 결과를 문자열로 변환하여 표시
+    let resultString = '';
+    for (let group in groupVariances) {
+        resultString += `${group}: 분산 = ${groupVariances[group].toFixed(2)}\n`;
+    }
+
+    // 결과를 HTML 요소에 표시
+    document.getElementById('varianceResult').textContent = resultString;
+}
