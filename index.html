@@ -11,6 +11,11 @@
 <body>
 
 <input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
+<input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
+<select id="groupSelect" onchange="calculateVariance(this.value)">
+    <!-- 옵션은 script.js에서 파일 로드 시 동적으로 추가됩니다 -->
+</select>
+<div id="varianceResult"></div>
 <input type="number" id="seedInput" placeholder="랜덤 시드 입력">
 <button onclick="shuffleDataWithSeed()">셔플</button>
 <button onclick="resetTable()">초기화</button>
