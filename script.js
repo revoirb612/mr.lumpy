@@ -368,9 +368,9 @@ function checkGroupStatisticsValidity() {
 
     for (let groupStat of groupStatistics) {
         // 기존 조건: '반' 컬럼의 유니크 카운트 일치 여부 확인
-        // if (groupStat.uniqueCounts['반'] !== classUniqueCount) {
-        //     return false;
-        // }
+        if (groupStat.uniqueCounts['반'] !== classUniqueCount) {
+            return false;
+        }
 
         // 새로운 조건: 'ID Unique Count'와 '이름 Unique Count'가 같지 않은 경우 검사
         // if (groupStat.uniqueCounts['ID'] !== groupStat.uniqueCounts['이름']) {
