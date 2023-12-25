@@ -2,6 +2,7 @@ let originalData = []; // 원본 데이터 저장을 위한 변수
 let randomizedData = []; // 랜덤화된 데이터 저장을 위한 변수
 let currentSeed = 0; // 현재 사용된 랜덤 시드
 let numberOfGroups = 0; 
+let groupStatistics = []; // 각 그룹별 통계를 저장하기 위한 글로벌 변수
 
 function handleFiles(files) {
     if (files.length) {
@@ -174,15 +175,22 @@ function calculateGroupDataCounts() {
     displayGroupDataCounts(groups);
 }
 
-// 변경된 displayGroupDataCounts 함수
 function displayGroupDataCounts(groupCounts) {
-    console.log(groupCounts); // 여기에 추가
-  
+    groupStatistics = []; // 배열 초기화
+    
     let resultsContainer = document.getElementById('groupCountsContainer');
-    resultsContainer.innerHTML = ''; // 이전 내용 초기화
+    resultsContainer.innerHTML = '';
+
     groupCounts.forEach((group, index) => {
+        let maleCount = group.filter(row => row['성별'] === '남').length;
+        let femaleCount = group.filter(row => row['성별'] === '여').length;
+        let total = group.length;
+
+        // 각 그룹의 통계 정보를 객체로 저장하고, 배열에 추가
+        groupStatistics.push({ groupId: index + 1, total, maleCount, femaleCount });
+
         let p = document.createElement('p');
-        p.textContent = `Group ${index + 1}: 총 ${group.length} (남: ${group.filter(row => row['성별'] === '남').length}, 여: ${group.filter(row => row['성별'] === '여').length})`;
+        p.textContent = `Group ${index + 1}: 총 ${total} (남: ${maleCount}, 여: ${femaleCount})`;
         resultsContainer.appendChild(p);
     });
 }
