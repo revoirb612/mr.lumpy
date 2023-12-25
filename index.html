@@ -5,27 +5,37 @@
     <title>CSV to Table with Separate Random Data</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
-    <script src="script.js"></script>
 </head>
 <body>
   <div>
-    <button onclick="resetTable()">초기화</button>
     <input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
   </div>
+  <div id="uniqueCountsContainer"></div>
   <div>
-    <input type="number" id="groupCount" />
-    <button onclick="setGroupCount()">Submit</button>
-    <button onclick="calculateGroupDataCounts()">그룹 데이터 수 계산</button> <!-- 새로운 버튼 추가 -->
     <p>입력된 그룹 수: <span id="inputGroupCount"></span></p>
+    <input type="number" id="groupCount" />
+    <button onclick="setGroupCount()">입력</button>
   </div>
   <div>
+    <p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
     <input type="number" id="seedInput" placeholder="랜덤 시드 입력">
     <button onclick="shuffleDataWithSeed()">셔플</button>
-    <p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
   </div>
-  <div id="uniqueCountsContainer"></div>
+  <div>
+    <button onclick="calculateGroupDataCounts()">새 그룹 만들기</button>
+    <button id="reviewButton">검토하기</button>
+  </div>
+  <div id="reviewResult"></div>
+  
+  <div>
+    <input type="number" id="repeatCount" placeholder="반복 횟수 입력">
+    <button onclick="repeatProcess()">반복 실행</button>
+  </div>
+  <div id="savedSeedsContainer"></div> <!-- savedRandomSeeds 값을 표시할 div 추가 -->
+  
   <div id="groupStatsContainer"></div>
   <div id="groupCountsContainer"></div> <!-- 결과를 표시할 div 추가 -->
-  <div id="tableContainer"></div>
+  
+  <script src="script.js"></script>
 </body>
 </html>
