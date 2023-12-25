@@ -10,6 +10,7 @@ function handleFiles(files) {
             header: true,
             complete: function(results) {
                 originalData = preprocessData(results.data);
+                randomizedData = originalData
                 createTable(originalData);
               
                 // analyzeUniqueDataCount 함수 호출
@@ -18,6 +19,7 @@ function handleFiles(files) {
             }
         });
     }
+    
 }
 
 function preprocessData(data) {
@@ -139,8 +141,8 @@ function calculateGroupDataCounts() {
         return;
     }
 
-    let maleData = originalData.filter(row => row['성별'] === '남');
-    let femaleData = originalData.filter(row => row['성별'] === '여');
+    let maleData = randomizedData.filter(row => row['성별'] === '남');
+    let femaleData = randomizedData.filter(row => row['성별'] === '여');
 
     let totalMaleCount = maleData.length;
     let totalFemaleCount = femaleData.length;
@@ -173,11 +175,46 @@ function calculateGroupDataCounts() {
     }
 
     displayGroupDataCounts(groups);
+    displayGroupStatistics();
+}
+
+// 테이블 생성 함수
+function createGroupTable(group, groupId) {
+    let table = document.createElement('table');
+    table.border = '1';
+    
+    // 테이블 헤더 생성
+    let thead = table.createTHead();
+    let headerRow = thead.insertRow();
+    Object.keys(group[0]).forEach(key => {
+        let th = document.createElement('th');
+        th.textContent = key;
+        headerRow.appendChild(th);
+    });
+
+    // 테이블 바디 생성
+    let tbody = table.createTBody();
+    group.forEach(row => {
+        let tr = tbody.insertRow();
+        Object.values(row).forEach(val => {
+            let td = tr.insertCell();
+            td.textContent = val;
+        });
+    });
+
+    return table;
+}
+
+// 분산 계산 함수
+function calculateVariance(group, key) {
+    let mean = group.reduce((acc, row) => acc + parseFloat(row[key]), 0) / group.length;
+    let variance = group.reduce((acc, row) => acc + Math.pow(parseFloat(row[key]) - mean, 2), 0) / group.length;
+    return variance;
 }
 
 function displayGroupDataCounts(groupCounts) {
     groupStatistics = []; // 배열 초기화
-    
+
     let resultsContainer = document.getElementById('groupCountsContainer');
     resultsContainer.innerHTML = '';
 
@@ -186,11 +223,100 @@ function displayGroupDataCounts(groupCounts) {
         let femaleCount = group.filter(row => row['성별'] === '여').length;
         let total = group.length;
 
-        // 각 그룹의 통계 정보를 객체로 저장하고, 배열에 추가
-        groupStatistics.push({ groupId: index + 1, total, maleCount, femaleCount });
+        // 각 그룹의 분산 계산
+        let groupVariances = {};
+        Object.keys(group[0]).forEach(key => {
+            if (!isNaN(group[0][key])) {
+                groupVariances[key] = calculateVariance(group, key);
+            }
+        });
 
+        // 그룹 정보와 분산 정보를 groupStatistics에 저장
+        groupStatistics.push({
+            groupId: index + 1, 
+            total, 
+            maleCount, 
+            femaleCount, 
+            variances: groupVariances
+        });
+
+        // 화면에 그룹 정보 표시
+        let groupContainer = document.createElement('div');
         let p = document.createElement('p');
         p.textContent = `Group ${index + 1}: 총 ${total} (남: ${maleCount}, 여: ${femaleCount})`;
-        resultsContainer.appendChild(p);
+
+        // 분산 정보 표시
+        let variances = document.createElement('ul');
+        Object.keys(groupVariances).forEach(key => {
+            let li = document.createElement('li');
+            li.textContent = `${key} 열의 분산: ${groupVariances[key].toFixed(2)}`;
+            variances.appendChild(li);
+        });
+
+        groupContainer.appendChild(p);
+        groupContainer.appendChild(createGroupTable(group, index + 1));
+        groupContainer.appendChild(variances);
+        resultsContainer.appendChild(groupContainer);
     });
+  
+    console.log(groupStatistics)
+}
+
+function displayGroupStatistics() {
+    let statsContainer = document.getElementById('groupStatsContainer');
+    statsContainer.innerHTML = ''; 
+
+    let table = document.createElement('table');
+    table.border = '1';
+
+    // 테이블 헤더 생성
+    let thead = table.createTHead();
+    let headerRow = thead.insertRow();
+    let baseHeaders = ['Group ID', 'Total', 'Male Count', 'Female Count'];
+    baseHeaders.forEach(header => {
+        let th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+    });
+
+    // 모든 그룹의 분산 키 수집
+    let varianceKeys = new Set();
+    groupStatistics.forEach(groupStat => {
+        Object.keys(groupStat.variances).forEach(key => {
+            varianceKeys.add(key);
+        });
+    });
+
+    // 분산 키를 헤더로 추가
+    varianceKeys.forEach(key => {
+        let th = document.createElement('th');
+        th.textContent = key;
+        headerRow.appendChild(th);
+    });
+
+    // 테이블 바디 생성
+    let tbody = table.createTBody();
+    groupStatistics.forEach(groupStat => {
+        let row = tbody.insertRow();
+
+        let cell = row.insertCell();
+        cell.textContent = groupStat.groupId;
+
+        cell = row.insertCell();
+        cell.textContent = groupStat.total;
+
+        cell = row.insertCell();
+        cell.textContent = groupStat.maleCount;
+
+        cell = row.insertCell();
+        cell.textContent = groupStat.femaleCount;
+
+        // 분산 값 추가
+        varianceKeys.forEach(key => {
+            cell = row.insertCell();
+            cell.textContent = groupStat.variances[key] ? groupStat.variances[key].toFixed(2) : 'N/A';
+        });
+    });
+
+    statsContainer.appendChild(table);
 }
