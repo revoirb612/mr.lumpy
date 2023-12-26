@@ -47,13 +47,22 @@ function setGroupCount() {
 function shuffleDataWithSeed() {
     return new Promise(resolve => {
         let seedInput = document.getElementById('seedInput').value;
-        currentSeed = seedInput ? parseInt(seedInput) : Math.floor(Math.random() * 1000000);
+        if (seedInput) {
+            currentSeed = parseInt(seedInput);
+        } else {
+            // seedrandom 라이브러리를 사용하여 더 강력한 난수 생성기 사용
+            var rng = new Math.seedrandom(); // 새로운 seedrandom 인스턴스
+            currentSeed = rng.int32(); // 32비트 정수 난수 생성
+        }
+
+        // seedrandom으로 초기화
         Math.seedrandom(currentSeed);
         randomizedData = shuffleArray([...originalData]);
         document.getElementById('randomSeed').textContent = currentSeed;
         resolve();
     });
 }
+
 
 function shuffleArray(array) {
     let m = array.length, t, i;
