@@ -269,14 +269,6 @@ function displayGroupDataCounts(groupCounts) {
         let femaleCount = group.filter(row => row['성별'] === '여').length;
         let total = group.length;
 
-        // 각 그룹의 분산 계산
-        let groupVariances = {};
-        Object.keys(group[0]).forEach(key => {
-            if (!isNaN(group[0][key])) {
-                groupVariances[key] = calculateVariance(group, key);
-            }
-        });
-
         // 유니크 데이터 수 계산
         let uniqueDataCounts = calculateUniqueDataCounts(group);
       
@@ -289,7 +281,6 @@ function displayGroupDataCounts(groupCounts) {
             total, 
             maleCount, 
             femaleCount, 
-            variances: groupVariances,
             uniqueCounts: uniqueDataCounts,
             sums: groupSums // 합계 정보 추가
         });
@@ -322,14 +313,10 @@ function displayGroupStatistics() {
         headerRow.appendChild(th);
     });
 
-    // 모든 그룹의 분산, 유니크 데이터, 그리고 SUM 키 수집
-    let varianceKeys = new Set();
+    // 모든 그룹의 유니크 데이터, 그리고 SUM 키 수집
     let uniqueDataKeys = new Set();
     let sumKeys = new Set();
     groupStatistics.forEach(groupStat => {
-        Object.keys(groupStat.variances).forEach(key => {
-            varianceKeys.add(key);
-        });
         Object.keys(groupStat.uniqueCounts).forEach(key => {
             uniqueDataKeys.add(key);
         });
@@ -338,12 +325,7 @@ function displayGroupStatistics() {
         });
     });
 
-    // 분산, 유니크 데이터, 그리고 SUM 키를 헤더로 추가
-    varianceKeys.forEach(key => {
-        let th = document.createElement('th');
-        th.textContent = `${key} Variance`;
-        headerRow.appendChild(th);
-    });
+    // 유니크 데이터, 그리고 SUM 키를 헤더로 추가
     uniqueDataKeys.forEach(key => {
         let th = document.createElement('th');
         th.textContent = `${key} Unique Count`;
@@ -371,12 +353,6 @@ function displayGroupStatistics() {
 
         cell = row.insertCell();
         cell.textContent = groupStat.femaleCount;
-
-        // 분산 값 추가
-        varianceKeys.forEach(key => {
-            cell = row.insertCell();
-            cell.textContent = groupStat.variances[key] ? groupStat.variances[key].toFixed(2) : 'N/A';
-        });
 
         // 유니크 데이터 값 추가
         uniqueDataKeys.forEach(key => {
