@@ -47,7 +47,7 @@ function setGroupCount() {
 function shuffleDataWithSeed() {
     return new Promise(resolve => {
         let seedInput = document.getElementById('seedInput').value;
-        currentSeed = seedInput ? parseInt(seedInput) : Math.floor(Math.random() * 1000000);
+        currentSeed = seedInput ? parseInt(seedInput) : Date.now(); // 현재 시간을 시드로 사용
         Math.seedrandom(currentSeed);
         randomizedData = shuffleArray([...originalData]);
         document.getElementById('randomSeed').textContent = currentSeed;
