@@ -372,6 +372,7 @@ function displayGroupStatistics() {
 
 function checkGroupStatisticsValidity() {
     let classUniqueCount = allUniqueCounts['반'];
+    let seedInfo = { seed: currentSeed, sumDifferences: {} };
 
     for (let groupStat of groupStatistics) {
         // 기존 조건: '반' 컬럼의 유니크 카운트 일치 여부 확인
@@ -383,11 +384,28 @@ function checkGroupStatisticsValidity() {
         if (groupStat.uniqueCounts['ID'] !== groupStat.uniqueCounts['이름']) {
            return false;
         }
-    }
-  
-    // 조건을 모두 만족하는 경우, 현재 사용된 랜덤 시드를 저장
-    savedRandomSeeds.push(currentSeed);
 
+        // 각 SUM 열의 최대값과 최소값 차이 계산
+        for (let key in groupStat.sums) {
+            if (!seedInfo.sumDifferences[key]) {
+                seedInfo.sumDifferences[key] = { max: groupStat.sums[key], min: groupStat.sums[key] };
+            } else {
+                if (groupStat.sums[key] > seedInfo.sumDifferences[key].max) {
+                    seedInfo.sumDifferences[key].max = groupStat.sums[key];
+                }
+                if (groupStat.sums[key] < seedInfo.sumDifferences[key].min) {
+                    seedInfo.sumDifferences[key].min = groupStat.sums[key];
+                }
+            }
+        }
+    }
+
+    // 차이 계산 후 저장
+    for (let key in seedInfo.sumDifferences) {
+        seedInfo.sumDifferences[key] = seedInfo.sumDifferences[key].max - seedInfo.sumDifferences[key].min;
+    }
+
+    savedRandomSeeds.push(seedInfo);
     return true; // 모든 조건을 만족하면 True 반환
 }
 
@@ -406,11 +424,28 @@ function displaySavedSeeds() {
     let container = document.getElementById('savedSeedsContainer');
     container.innerHTML = ''; // 이전 내용 초기화
 
-    savedRandomSeeds.forEach(seed => {
-        let button = document.createElement('button');
-        button.textContent = `시드 사용: ${seed}`;
-        button.onclick = function() { useSavedSeed(seed); };
-        container.appendChild(button);
+    savedRandomSeeds.forEach(seedInfo => {
+        // 카드 요소 생성
+        let card = document.createElement('div');
+        card.classList.add('seed-card'); // CSS 클래스 추가
+        card.onclick = function() { useSavedSeed(seedInfo.seed); };
+
+        // 시드 정보를 표시하는 헤더
+        let header = document.createElement('h3');
+        header.textContent = `시드: ${seedInfo.seed}`;
+        card.appendChild(header);
+
+        // 각 SUM 차이를 표시하는 섹션
+        let sumDifferencesSection = document.createElement('div');
+        for (let key in seedInfo.sumDifferences) {
+            let p = document.createElement('p');
+            p.textContent = `${key} 차이: ${seedInfo.sumDifferences[key].toFixed(2)}`;
+            sumDifferencesSection.appendChild(p);
+        }
+        card.appendChild(sumDifferencesSection);
+
+        // 카드를 컨테이너에 추가
+        container.appendChild(card);
     });
 }
 
