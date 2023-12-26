@@ -47,7 +47,14 @@ function setGroupCount() {
 function shuffleDataWithSeed() {
     return new Promise(resolve => {
         let seedInput = document.getElementById('seedInput').value;
-        currentSeed = seedInput ? parseInt(seedInput) : Date.now(); // 현재 시간을 시드로 사용
+        if (seedInput) {
+            currentSeed = parseInt(seedInput);
+        } else {
+            // 현재 시간을 밀리초 단위로 가져와서 복잡한 연산을 통해 시드 생성
+            let now = new Date();
+            currentSeed = (now.getFullYear() * now.getMonth() * now.getDate() * now.getHours() * now.getMinutes() * now.getSeconds() * now.getMilliseconds()) % 100000000;
+        }
+
         Math.seedrandom(currentSeed);
         randomizedData = shuffleArray([...originalData]);
         document.getElementById('randomSeed').textContent = currentSeed;
