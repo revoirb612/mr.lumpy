@@ -372,9 +372,6 @@ function displayGroupStatistics() {
 
 function checkGroupStatisticsValidity() {
     let classUniqueCount = allUniqueCounts['반'];
-    let achievementMaleDiff = calculateMaxMinDiff('학업성취도(남) Sum');
-    let achievementFemaleDiff = calculateMaxMinDiff('학업성취도(여) Sum');
-    let guidanceDifficultyDiff = calculateMaxMinDiff('지도곤란도 Sum');
 
     for (let groupStat of groupStatistics) {
         // 기존 조건: '반' 컬럼의 유니크 카운트 일치 여부 확인
@@ -388,21 +385,10 @@ function checkGroupStatisticsValidity() {
         }
     }
   
-    savedRandomSeeds.push({
-        seed: currentSeed,
-        achievementMaleDiff,
-        achievementFemaleDiff,
-        guidanceDifficultyDiff
-    });
+    // 조건을 모두 만족하는 경우, 현재 사용된 랜덤 시드를 저장
+    savedRandomSeeds.push(currentSeed);
 
     return true; // 모든 조건을 만족하면 True 반환
-}
-
-function calculateMaxMinDiff(key) {
-    let values = groupStatistics.map(stat => stat[key]);
-    let max = Math.max(...values);
-    let min = Math.min(...values);
-    return max - min;
 }
 
 async function repeatProcess() {
@@ -418,12 +404,12 @@ async function repeatProcess() {
 
 function displaySavedSeeds() {
     let container = document.getElementById('savedSeedsContainer');
-    container.innerHTML = '';
+    container.innerHTML = ''; // 이전 내용 초기화
 
-    savedRandomSeeds.forEach(data => {
+    savedRandomSeeds.forEach(seed => {
         let button = document.createElement('button');
-        button.textContent = `시드: ${data.seed}, 학업성취도(남) 차이: ${data.achievementMaleDiff}, 학업성취도(여) 차이: ${data.achievementFemaleDiff}, 지도곤란도 차이: ${data.guidanceDifficultyDiff}`;
-        button.onclick = function() { useSavedSeed(data.seed); };
+        button.textContent = `시드 사용: ${seed}`;
+        button.onclick = function() { useSavedSeed(seed); };
         container.appendChild(button);
     });
 }
