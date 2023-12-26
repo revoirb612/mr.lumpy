@@ -135,39 +135,46 @@ function calculateGroupDataCounts() {
         numberOfGroups = parseInt(document.getElementById('groupCount').value);
         if (numberOfGroups <= 0 || isNaN(numberOfGroups)) {
             alert('유효한 그룹 수를 입력해주세요.');
-            resolve();
+            resolve(); // 그룹 수가 유효하지 않으면 즉시 resolve 호출
             return;
         }
 
-        let classCounts = {};
-        randomizedData.forEach(row => {
-            classCounts[row['반']] = (classCounts[row['반']] || 0) + 1;
-        });
+        let maleData = randomizedData.filter(row => row['성별'] === '남');
+        let femaleData = randomizedData.filter(row => row['성별'] === '여');
 
-        // 각 '반' 별 최대 배정 가능 인원 계산
-        let maxPerClass = {};
-        Object.keys(classCounts).forEach(className => {
-            maxPerClass[className] = Math.ceil(classCounts[className] / numberOfGroups);
-        });
+        let totalMaleCount = maleData.length;
+        let totalFemaleCount = femaleData.length;
+        let totalDataCount = originalData.length;
 
-        let groups = Array.from({ length: numberOfGroups }, () => ({ members: [], classCounts: {}, total: 0 }));
+        let idealMalePerGroup = Math.round(totalMaleCount / numberOfGroups);
+        let idealFemalePerGroup = Math.round(totalFemaleCount / numberOfGroups);
 
-        // 남성과 여성을 균등하게 배정하면서 '반'의 최대 인원을 고려
-        randomizedData.forEach(member => {
-            for (let group of groups) {
-                let classCount = group.classCounts[member['반']] || 0;
-                if (group.total < randomizedData.length / numberOfGroups && classCount < maxPerClass[member['반']]) {
-                    group.members.push(member);
-                    group.classCounts[member['반']] = classCount + 1;
-                    group.total++;
-                    break;
-                }
+        let groups = Array.from({ length: numberOfGroups }, () => ({ male: [], female: [], total: 0 }));
+
+        // 남성과 여성을 번갈아가며 그룹에 할당
+        let maleIndex = 0, femaleIndex = 0;
+        for (let i = 0; i < totalDataCount; i++) {
+            let groupIndex = i % numberOfGroups;
+            if (groups[groupIndex].male.length < idealMalePerGroup && maleIndex < totalMaleCount) {
+                groups[groupIndex].male.push(maleData[maleIndex]);
+                groups[groupIndex].total++;
+                maleIndex++;
+            } else if (femaleIndex < totalFemaleCount) {
+                groups[groupIndex].female.push(femaleData[femaleIndex]);
+                groups[groupIndex].total++;
+                femaleIndex++;
             }
-        });
+        }
 
-        displayGroupDataCounts(groups.map(group => group.members));
+        // 결과를 저장하기 위한 추가된 코드
+        for (let i = 0; i < numberOfGroups; i++) {
+            // 남성과 여성 데이터를 혼합
+            groups[i] = groups[i].male.concat(groups[i].female);
+        }
+
+        displayGroupDataCounts(groups);
         displayGroupStatistics();
-        resolve();
+        resolve(); // 모든 처리가 완료되면 resolve 호출
     });
 }
 
