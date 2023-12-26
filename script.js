@@ -432,14 +432,14 @@ function displaySavedSeeds() {
 
         // 시드 정보를 표시하는 헤더
         let header = document.createElement('h3');
-        header.textContent = `시드: ${seedInfo.seed}`;
+        header.textContent = `${seedInfo.seed}`;
         card.appendChild(header);
 
         // 각 SUM 차이를 표시하는 섹션
         let sumDifferencesSection = document.createElement('div');
         for (let key in seedInfo.sumDifferences) {
             let p = document.createElement('p');
-            p.textContent = `${key} 차이: ${seedInfo.sumDifferences[key].toFixed(2)}`;
+            p.textContent = `${key}: ${seedInfo.sumDifferences[key].toFixed(2)}`;
             sumDifferencesSection.appendChild(p);
         }
         card.appendChild(sumDifferencesSection);
