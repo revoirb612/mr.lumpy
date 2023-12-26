@@ -50,13 +50,12 @@ function shuffleDataWithSeed() {
         if (seedInput) {
             currentSeed = parseInt(seedInput);
         } else {
-            // 현재 시간 기반 복잡한 계산과 기존 난수 생성 방식의 조합
-            let now = new Date();
-            let timeBasedSeed = (now.getFullYear() * now.getMonth() * now.getDate() * now.getHours() * now.getMinutes() * now.getSeconds() * now.getMilliseconds()) % 100000000;
-            let randomSeed = Math.floor(Math.random() * 1000000);
-            currentSeed = (timeBasedSeed + randomSeed) % 1000000000;
+            // seedrandom 라이브러리를 사용하여 더 강력한 난수 생성기 사용
+            var rng = new Math.seedrandom(); // 새로운 seedrandom 인스턴스
+            currentSeed = rng.int32(); // 32비트 정수 난수 생성
         }
 
+        // seedrandom으로 초기화
         Math.seedrandom(currentSeed);
         randomizedData = shuffleArray([...originalData]);
         document.getElementById('randomSeed').textContent = currentSeed;
