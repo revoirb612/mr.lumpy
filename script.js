@@ -328,7 +328,7 @@ function displayGroupStatistics() {
     // 유니크 데이터, 그리고 SUM 키를 헤더로 추가
     uniqueDataKeys.forEach(key => {
         let th = document.createElement('th');
-        th.textContent = `${key} Unique Count`;
+        th.textContent = `${key} Unique`;
         headerRow.appendChild(th);
     });
     sumKeys.forEach(key => {
