@@ -406,30 +406,11 @@ function displaySavedSeeds() {
     let container = document.getElementById('savedSeedsContainer');
     container.innerHTML = ''; // 이전 내용 초기화
 
-    savedRandomSeeds.forEach(seedInfo => {
-        // 카드 생성
-        let card = document.createElement('div');
-        card.className = 'seed-card';
-        card.style.border = '1px solid #ccc';
-        card.style.borderRadius = '10px';
-        card.style.padding = '15px';
-        card.style.marginBottom = '10px';
-        card.style.cursor = 'pointer';
-        card.onclick = function() { useSavedSeed(seedInfo.seed); };
-
-        // 시드 정보
-        let seedText = document.createElement('p');
-        seedText.textContent = `시드: ${seedInfo.seed}`;
-        card.appendChild(seedText);
-
-        // 추가 정보 (예시: 학업성취도 남/여, 지도곤란도 차이 등)
-        // 추가 정보를 추가하려면 아래 코드 라인을 수정하세요.
-        let additionalInfo = document.createElement('p');
-        additionalInfo.textContent = `추가 정보: ${seedInfo.additionalInfo}`;
-        card.appendChild(additionalInfo);
-
-        // 컨테이너에 카드 추가
-        container.appendChild(card);
+    savedRandomSeeds.forEach(seed => {
+        let button = document.createElement('button');
+        button.textContent = `시드 사용: ${seed}`;
+        button.onclick = function() { useSavedSeed(seed); };
+        container.appendChild(button);
     });
 }
 
