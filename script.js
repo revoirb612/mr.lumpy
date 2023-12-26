@@ -398,18 +398,22 @@ function checkGroupStatisticsValidity() {
         }
     }
 
-    // 차이 계산
+    // 차이 계산 및 합산
+    let currentSumDifference = 0;
     for (let key in currentSeedInfo.sumDifferences) {
-        currentSeedInfo.sumDifferences[key] = currentSeedInfo.sumDifferences[key].max - currentSeedInfo.sumDifferences[key].min;
+        let difference = currentSeedInfo.sumDifferences[key].max - currentSeedInfo.sumDifferences[key].min;
+        currentSeedInfo.sumDifferences[key] = difference;
+        currentSumDifference += difference;
     }
 
-    // 기존에 저장된 데이터와 현재 값 비교
+    // 기존에 저장된 데이터와 현재 값의 합 비교
     for (let savedSeed of savedRandomSeeds) {
-        for (let key in currentSeedInfo.sumDifferences) {
-            // 현재 값이 저장된 값보다 크거나 같은 경우가 하나라도 있으면 저장하지 않음
-            if (currentSeedInfo.sumDifferences[key] >= savedSeed.sumDifferences[key]) {
-                return false;
-            }
+        let savedSumDifference = 0;
+        for (let key in savedSeed.sumDifferences) {
+            savedSumDifference += savedSeed.sumDifferences[key];
+        }
+        if (currentSumDifference >= savedSumDifference) {
+            return false; // 현재 합이 저장된 합보다 크거나 같으면 저장하지 않음
         }
     }
 
