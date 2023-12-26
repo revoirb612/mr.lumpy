@@ -382,19 +382,21 @@ function checkGroupStatisticsValidity() {
 
         // 새로운 조건: 'ID Unique Count'와 '이름 Unique Count'가 같지 않은 경우 검사
         if (groupStat.uniqueCounts['ID'] !== groupStat.uniqueCounts['이름']) {
-           return false;
+            return false;
         }
 
-        // 각 SUM 열의 최대값과 최소값 차이 계산
+        // 각 SUM 열의 최대값과 최소값 차이 계산, 'ID', '반', '번호' 열은 제외
         for (let key in groupStat.sums) {
-            if (!seedInfo.sumDifferences[key]) {
-                seedInfo.sumDifferences[key] = { max: groupStat.sums[key], min: groupStat.sums[key] };
-            } else {
-                if (groupStat.sums[key] > seedInfo.sumDifferences[key].max) {
-                    seedInfo.sumDifferences[key].max = groupStat.sums[key];
-                }
-                if (groupStat.sums[key] < seedInfo.sumDifferences[key].min) {
-                    seedInfo.sumDifferences[key].min = groupStat.sums[key];
+            if (key !== 'ID' && key !== '반' && key !== '번호') {
+                if (!seedInfo.sumDifferences[key]) {
+                    seedInfo.sumDifferences[key] = { max: groupStat.sums[key], min: groupStat.sums[key] };
+                } else {
+                    if (groupStat.sums[key] > seedInfo.sumDifferences[key].max) {
+                        seedInfo.sumDifferences[key].max = groupStat.sums[key];
+                    }
+                    if (groupStat.sums[key] < seedInfo.sumDifferences[key].min) {
+                        seedInfo.sumDifferences[key].min = groupStat.sums[key];
+                    }
                 }
             }
         }
