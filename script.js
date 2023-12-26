@@ -404,9 +404,9 @@ function checkGroupStatisticsValidity() {
         }
 
         // 새로운 조건: 'ID Unique Count'와 '이름 Unique Count'가 같지 않은 경우 검사
-        // if (groupStat.uniqueCounts['ID'] !== groupStat.uniqueCounts['이름']) {
-        //    return false;
-        // }
+        if (groupStat.uniqueCounts['ID'] !== groupStat.uniqueCounts['이름']) {
+           return false;
+        }
     }
   
     // 조건을 모두 만족하는 경우, 현재 사용된 랜덤 시드를 저장
