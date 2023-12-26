@@ -130,6 +130,25 @@ function displayUniqueDataCounts(counts) {
     resultsContainer.appendChild(table);
 }
 
+function cyclicSort(data) {
+    const maxClassNumber = Math.max(...data.map(item => parseInt(item['반'])));
+    const sortedData = [];
+    let added = true;
+
+    while (added) {
+        added = false;
+        for (let i = 1; i <= maxClassNumber; i++) {
+            const index = data.findIndex(item => parseInt(item['반']) === i);
+            if (index !== -1) {
+                sortedData.push(data[index]);
+                data.splice(index, 1);
+                added = true;
+            }
+        }
+    }
+    return sortedData;
+}
+
 function calculateGroupDataCounts() {
     return new Promise(resolve => {
         numberOfGroups = parseInt(document.getElementById('groupCount').value);
@@ -138,6 +157,9 @@ function calculateGroupDataCounts() {
             resolve(); // 그룹 수가 유효하지 않으면 즉시 resolve 호출
             return;
         }
+        
+        // '반' 컬럼을 기준으로 데이터 순환 정렬
+        randomizedData = cyclicSort(randomizedData);
 
         let maleData = randomizedData.filter(row => row['성별'] === '남');
         let femaleData = randomizedData.filter(row => row['성별'] === '여');
