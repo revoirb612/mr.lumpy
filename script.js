@@ -375,17 +375,13 @@ function checkGroupStatisticsValidity() {
     let currentSeedInfo = { seed: currentSeed, sumDifferences: {} };
 
     for (let groupStat of groupStatistics) {
-        // 기존 조건: '반' 컬럼의 유니크 카운트 일치 여부 확인
-        if (groupStat.uniqueCounts['반'] !== classUniqueCount) {
+        // '반', 'ID', '이름' 유니크 카운트 조건 확인
+        if (groupStat.uniqueCounts['반'] !== classUniqueCount ||
+            groupStat.uniqueCounts['ID'] !== groupStat.uniqueCounts['이름']) {
             return false;
         }
 
-        // 새로운 조건: 'ID Unique Count'와 '이름 Unique Count'가 같지 않은 경우 검사
-        if (groupStat.uniqueCounts['ID'] !== groupStat.uniqueCounts['이름']) {
-            return false;
-        }
-
-        // 각 SUM 열의 최대값과 최소값 차이 계산
+        // 각 SUM 열의 최대값과 최소값 차이 계산, 'ID', '반', '번호' 열은 제외
         for (let key in groupStat.sums) {
             if (key !== 'ID' && key !== '반' && key !== '번호') {
                 if (!currentSeedInfo.sumDifferences[key]) {
@@ -410,14 +406,15 @@ function checkGroupStatisticsValidity() {
     // 기존에 저장된 데이터와 현재 값 비교
     for (let savedSeed of savedRandomSeeds) {
         for (let key in currentSeedInfo.sumDifferences) {
-            if (currentSeedInfo.sumDifferences[key] > savedSeed.sumDifferences[key]) {
-                return false; // 현재 값이 저장된 값보다 큰 경우 발견
+            // 현재 값이 저장된 값보다 크거나 같은 경우가 하나라도 있으면 저장하지 않음
+            if (currentSeedInfo.sumDifferences[key] >= savedSeed.sumDifferences[key]) {
+                return false;
             }
         }
     }
 
     savedRandomSeeds.push(currentSeedInfo);
-    return true; // 모든 조건을 만족하면 True 반환
+    return true; // 모든 조건을 만족하면 현재 시드 정보 저장
 }
 
 async function repeatProcess() {
