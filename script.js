@@ -180,6 +180,9 @@ function calculateGroupDataCounts() {
 
 // 테이블 생성 함수
 function createGroupTable(group, groupId) {
+    // ID 열을 기준으로 데이터를 오름차순으로 정렬
+    group.sort((a, b) => a.ID - b.ID);
+
     let table = document.createElement('table');
     table.border = '1';
     
