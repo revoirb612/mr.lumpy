@@ -372,7 +372,7 @@ function displayGroupStatistics() {
 
 function checkGroupStatisticsValidity() {
     let classUniqueCount = allUniqueCounts['반'];
-    let currentSeedInfo = { seed: currentSeed, sums: {} };
+    let currentSeedInfo = { seed: currentSeed, sumDifferences: {} };
 
     for (let groupStat of groupStatistics) {
         // '반', 'ID', '이름' 유니크 카운트 조건 확인
@@ -381,20 +381,33 @@ function checkGroupStatisticsValidity() {
             return false;
         }
 
-        // 각 SUM 열 계산, 'ID', '반', '번호' 열은 제외
+        // 각 SUM 열의 최대값과 최소값 차이 계산, 'ID', '반', '번호' 열은 제외
         for (let key in groupStat.sums) {
             if (key !== 'ID' && key !== '반' && key !== '번호') {
-                currentSeedInfo.sums[key] = currentSeedInfo.sums[key] || 0;
-                currentSeedInfo.sums[key] += groupStat.sums[key];
+                if (!currentSeedInfo.sumDifferences[key]) {
+                    currentSeedInfo.sumDifferences[key] = { max: groupStat.sums[key], min: groupStat.sums[key] };
+                } else {
+                    if (groupStat.sums[key] > currentSeedInfo.sumDifferences[key].max) {
+                        currentSeedInfo.sumDifferences[key].max = groupStat.sums[key];
+                    }
+                    if (groupStat.sums[key] < currentSeedInfo.sumDifferences[key].min) {
+                        currentSeedInfo.sumDifferences[key].min = groupStat.sums[key];
+                    }
+                }
             }
         }
     }
 
+    // 차이 계산
+    for (let key in currentSeedInfo.sumDifferences) {
+        currentSeedInfo.sumDifferences[key] = currentSeedInfo.sumDifferences[key].max - currentSeedInfo.sumDifferences[key].min;
+    }
+
     // 기존에 저장된 데이터와 현재 값 비교
     for (let savedSeed of savedRandomSeeds) {
-        for (let key in currentSeedInfo.sums) {
-            // 현재 합계가 저장된 합계보다 크거나 같으면 저장하지 않음
-            if (currentSeedInfo.sums[key] >= savedSeed.sums[key]) {
+        for (let key in currentSeedInfo.sumDifferences) {
+            // 현재 값이 저장된 값보다 크거나 같은 경우가 하나라도 있으면 저장하지 않음
+            if (currentSeedInfo.sumDifferences[key] >= savedSeed.sumDifferences[key]) {
                 return false;
             }
         }
