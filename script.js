@@ -403,6 +403,21 @@ async function repeatProcess() {
 }
 
 function displaySavedSeeds() {
-  let container = document.getElementById('savedSeedsContainer');
-  container.innerHTML = '저장된 랜덤 시드: ' + savedRandomSeeds.join(', ');
+    let container = document.getElementById('savedSeedsContainer');
+    container.innerHTML = ''; // 이전 내용 초기화
+
+    savedRandomSeeds.forEach(seed => {
+        let button = document.createElement('button');
+        button.textContent = `시드 사용: ${seed}`;
+        button.onclick = function() { useSavedSeed(seed); };
+        container.appendChild(button);
+    });
+}
+
+function useSavedSeed(seed) {
+    currentSeed = seed;
+    Math.seedrandom(currentSeed);
+    randomizedData = shuffleArray([...originalData]);
+    document.getElementById('randomSeed').textContent = currentSeed;
+    calculateGroupDataCounts();
 }
