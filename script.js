@@ -157,15 +157,9 @@ function calculateGroupDataCounts() {
             resolve(); // 그룹 수가 유효하지 않으면 즉시 resolve 호출
             return;
         }
-
-        // 먼저 '성별'을 기준으로 오름차순 정렬
-        randomizedData.sort((a, b) => a['성별'].localeCompare(b['성별']));
         
-        // '반' 컬럼을 기준으로 데이터 순환 정렬
-        randomizedData = cyclicSort(randomizedData);
-
-        let maleData = randomizedData.filter(row => row['성별'] === '남');
-        let femaleData = randomizedData.filter(row => row['성별'] === '여');
+        let maleData = cyclicSort(randomizedData.filter(row => row['성별'] === '남'));
+        let femaleData = cyclicSort(randomizedData.filter(row => row['성별'] === '여'));
 
         let totalMaleCount = maleData.length;
         let totalFemaleCount = femaleData.length;
