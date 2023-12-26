@@ -157,6 +157,9 @@ function calculateGroupDataCounts() {
             resolve(); // 그룹 수가 유효하지 않으면 즉시 resolve 호출
             return;
         }
+
+        // 먼저 '성별'을 기준으로 오름차순 정렬
+        randomizedData.sort((a, b) => a['성별'].localeCompare(b['성별']));
         
         // '반' 컬럼을 기준으로 데이터 순환 정렬
         randomizedData = cyclicSort(randomizedData);
