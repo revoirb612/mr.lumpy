@@ -1,32 +1,32 @@
 #savedSeedsContainer {
-    display: flex;                /* Flexbox 레이아웃 적용 */
-    flex-wrap: wrap;              /* 내용이 넘칠 경우 다음 줄로 이동 */
-    align-items: flex-start;      /* 카드의 상단을 맞춤 */
-    gap: 10px;                    /* 카드 사이의 간격 */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
 }
 
 .seed-card {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 15px;
+    padding: 10px;               /* 패딩 감소 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    flex: 0 0 200px;              /* 고정 폭 설정 */
-    margin-bottom: 10px;          /* 하단 여백 */
-    height: auto;                 /* 카드 높이 자동 조정 */
+    flex: 0 0 150px;             /* 폭 감소 */
+    margin-bottom: 10px;
+    height: auto;
 }
 
 .seed-card h3 {
     margin-top: 0;
     color: #333;
-    font-size: 1.1em;             /* 제목 폰트 크기 증가 */
-    font-weight: bold;            /* 제목 폰트 굵기 */
+    font-size: 1em;              /* 제목 폰트 크기 감소 */
+    font-weight: bold;
 }
 
 .seed-card p {
     color: #666;
-    font-size: 0.9em;
-    margin-top: 5px;
-    line-height: 1.4;             /* 문단 줄 간격 조정 */
+    font-size: 0.8em;            /* 문단 폰트 크기 감소 */
+    margin-top: 4px;             /* 상단 여백 감소 */
+    line-height: 1.3;            /* 줄 간격 조정 */
 }
