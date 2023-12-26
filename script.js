@@ -177,10 +177,13 @@ function calculateGroupDataCounts() {
         Object.keys(classData).forEach(className => {
             let classMembers = classData[className];
             classMembers.forEach(member => {
-                let groupIndex = groups.findIndex(group => group.total < (totalDataCount / numberOfGroups));
-                if (groupIndex !== -1) {
-                    groups[groupIndex]['반'].push(member);
-                    groups[groupIndex].total++;
+                // 현재 그룹에 여유 공간이 있는지 확인
+                let availableGroups = groups.filter(group => group.total < (totalDataCount / numberOfGroups));
+                if (availableGroups.length > 0) {
+                    // 가능한 한 균등하게 '반' 멤버를 배분
+                    let selectedGroup = availableGroups[Math.floor(Math.random() * availableGroups.length)];
+                    selectedGroup['반'].push(member);
+                    selectedGroup.total++;
                 }
             });
         });
@@ -195,7 +198,6 @@ function calculateGroupDataCounts() {
         resolve();
     });
 }
-
 
 // 테이블 생성 함수
 function createGroupTable(group, groupId) {
