@@ -399,12 +399,17 @@ function checkGroupStatisticsValidity() {
     }
 
     // 차이 계산 및 합산
+    // let currentSumDifference = 0;
+    // for (let key in currentSeedInfo.sumDifferences) {
+    //     let difference = currentSeedInfo.sumDifferences[key].max - currentSeedInfo.sumDifferences[key].min;
+    //     currentSeedInfo.sumDifferences[key] = difference;
+    //     currentSumDifference += difference;
+    // }
+
     let currentSumDifference = 0;
-    for (let key in currentSeedInfo.sumDifferences) {
-        let difference = currentSeedInfo.sumDifferences[key].max - currentSeedInfo.sumDifferences[key].min;
-        currentSeedInfo.sumDifferences[key] = difference;
-        currentSumDifference += difference;
-    }
+    let difference = currentSeedInfo.sumDifferences['지도곤란도'].max - currentSeedInfo.sumDifferences['지도곤란도'].min;
+    currentSeedInfo.sumDifferences['지도곤란도'] = difference;
+    currentSumDifference += difference;
 
     // 기존에 저장된 데이터와 현재 값의 합 비교
     for (let savedSeed of savedRandomSeeds) {
