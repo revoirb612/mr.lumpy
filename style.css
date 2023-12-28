@@ -30,3 +30,7 @@
     margin-top: 4px;             /* 상단 여백 감소 */
     line-height: 1.3;            /* 줄 간격 조정 */
 }
+
+#seedInputSection, #groupControls {
+    display: none;
+}
