@@ -383,7 +383,6 @@ function checkGroupStatisticsValidity() {
 
         // 각 SUM 열의 최대값과 최소값 차이 계산, 'ID', '반', '번호' 열은 제외
         for (let key in groupStat.sums) {
-            // if (key == '지도곤란도') {
             if (key !== 'ID' && key !== '반' && key !== '번호') {
                 if (!currentSeedInfo.sumDifferences[key]) {
                     currentSeedInfo.sumDifferences[key] = { max: groupStat.sums[key], min: groupStat.sums[key] };
@@ -402,8 +401,8 @@ function checkGroupStatisticsValidity() {
     // 차이 계산 및 합산
     let currentSumDifference = 0;
     for (let key in currentSeedInfo.sumDifferences) {
-        let difference = currentSeedInfo.sumDifferences['지도곤란도'].max - currentSeedInfo.sumDifferences['지도곤란도'].min;
-        currentSeedInfo.sumDifferences['지도곤란도'] = difference;
+        let difference = currentSeedInfo.sumDifferences[key].max - currentSeedInfo.sumDifferences[key].min;
+        currentSeedInfo.sumDifferences[key] = difference;
         currentSumDifference += difference;
     }
 
@@ -411,7 +410,7 @@ function checkGroupStatisticsValidity() {
     for (let savedSeed of savedRandomSeeds) {
         let savedSumDifference = 0;
         for (let key in savedSeed.sumDifferences) {
-            savedSumDifference += savedSeed.sumDifferences['지도곤란도'];
+            savedSumDifference += savedSeed.sumDifferences[key];
         }
         if (currentSumDifference >= savedSumDifference) {
             return false; // 현재 합이 저장된 합보다 크거나 같으면 저장하지 않음
