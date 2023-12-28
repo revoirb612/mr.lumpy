@@ -370,18 +370,16 @@ function displayGroupStatistics() {
     statsContainer.appendChild(table);
 }
 
-function checkGroupStatisticsValidity() {
+function checkGroupStatisticsValidity(comparisonKeys = []) {
     let classUniqueCount = allUniqueCounts['반'];
     let currentSeedInfo = { seed: currentSeed, sumDifferences: {} };
 
     for (let groupStat of groupStatistics) {
-        // '반', 'ID', '이름' 유니크 카운트 조건 확인
         if (groupStat.uniqueCounts['반'] !== classUniqueCount ||
             groupStat.uniqueCounts['ID'] !== groupStat.uniqueCounts['이름']) {
             return false;
         }
 
-        // 각 SUM 열의 최대값과 최소값 차이 계산, 'ID', '반', '번호' 열은 제외
         for (let key in groupStat.sums) {
             if (key !== 'ID' && key !== '반' && key !== '번호') {
                 if (!currentSeedInfo.sumDifferences[key]) {
@@ -398,27 +396,27 @@ function checkGroupStatisticsValidity() {
         }
     }
 
-    // 차이 계산 및 합산
-    let currentSumDifference = 0;
-    for (let key in currentSeedInfo.sumDifferences) {
-        let difference = currentSeedInfo.sumDifferences[key].max - currentSeedInfo.sumDifferences[key].min;
-        currentSeedInfo.sumDifferences[key] = difference;
-        currentSumDifference += difference;
-    }
+    let currentSumDifference = calculateSumDifference(currentSeedInfo.sumDifferences, comparisonKeys);
 
-    // 기존에 저장된 데이터와 현재 값의 합 비교
     for (let savedSeed of savedRandomSeeds) {
-        let savedSumDifference = 0;
-        for (let key in savedSeed.sumDifferences) {
-            savedSumDifference += savedSeed.sumDifferences[key];
-        }
+        let savedSumDifference = calculateSumDifference(savedSeed.sumDifferences, comparisonKeys);
         if (currentSumDifference >= savedSumDifference) {
-            return false; // 현재 합이 저장된 합보다 크거나 같으면 저장하지 않음
+            return false;
         }
     }
 
     savedRandomSeeds.push(currentSeedInfo);
-    return true; // 모든 조건을 만족하면 현재 시드 정보 저장
+    return true;
+}
+
+function calculateSumDifference(sumDifferences, keys) {
+    let totalDifference = 0;
+    for (let key in sumDifferences) {
+        if (keys.length === 0 || keys.includes(key)) {
+            totalDifference += sumDifferences[key].max - sumDifferences[key].min;
+        }
+    }
+    return totalDifference;
 }
 
 async function repeatProcess() {
