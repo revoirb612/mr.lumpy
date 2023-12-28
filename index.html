@@ -18,12 +18,24 @@
     <button onclick="setGroupCount()">입력</button>
   </div>
   <div>
+    <p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
+    <input type="number" id="seedInput" placeholder="랜덤 시드 입력">
+    <button onclick="shuffleDataWithSeed()">셔플</button>
+  </div>
+  <div>
+    <button onclick="calculateGroupDataCounts()">새 그룹 만들기</button>
+    <button id="reviewButton">검토하기</button>
+  </div>
+  <div id="reviewResult"></div>
+  
+  <div>
     <input type="number" id="repeatCount" placeholder="반복 횟수 입력">
     <button onclick="repeatProcess()">반복 실행</button>
   </div>
-  <div id="savedSeedsContainer"></div>
+  <div id="savedSeedsContainer"></div> <!-- savedRandomSeeds 값을 표시할 div 추가 -->
+  
   <div id="groupStatsContainer"></div>
-  <div id="groupCountsContainer"></div>
+  <div id="groupCountsContainer"></div> <!-- 결과를 표시할 div 추가 -->
   
   <script src="script.js"></script>
 </body>
