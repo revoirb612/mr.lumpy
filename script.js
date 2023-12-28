@@ -22,11 +22,35 @@ function handleFiles(files) {
               
                 // analyzeUniqueDataCount 함수 호출
                 let uniqueCounts = analyzeUniqueDataCount(originalData);
-                displayUniqueDataCounts(uniqueCounts); // 결과 표시 함수 호출                
+                displayUniqueDataCounts(uniqueCounts); // 결과 표시 함수 호출               
+
+                // 키 선택 체크박스 생성
+                createKeyCheckboxes(results.data[0]);                
             }
         });
-    }
-    
+    }    
+}
+
+function createKeyCheckboxes(headers) {
+    let checkboxesContainer = document.getElementById('keyCheckboxes');
+    checkboxesContainer.innerHTML = ''; // 이전 체크박스 초기화
+
+    headers.forEach(header => {
+        if (!['ID', '반', '번호'].includes(header)) {
+            let checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = header;
+            checkbox.value = header;
+
+            let label = document.createElement('label');
+            label.htmlFor = header;
+            label.appendChild(document.createTextNode(header));
+
+            checkboxesContainer.appendChild(checkbox);
+            checkboxesContainer.appendChild(label);
+            checkboxesContainer.appendChild(document.createElement('br'));
+        }
+    });
 }
 
 function preprocessData(data) {
