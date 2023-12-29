@@ -2,6 +2,46 @@ body, html {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
+#orderContainer {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#orderContainer h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#orderContainer p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#orderContainer input[type="number"] {
+    width: 100px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#orderContainer button {
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#orderContainer button:hover {
+    background-color: #0056b3;
+}
+
 #savedSeedsContainer {
     display: flex;
     flex-wrap: wrap;
