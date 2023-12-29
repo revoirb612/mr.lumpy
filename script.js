@@ -12,6 +12,13 @@ document.getElementById('reviewButton').addEventListener('click', function() {
     document.getElementById('reviewResult').textContent = resultText;
 });
 
+// CSV 다운로드 버튼 이벤트 리스너
+document.getElementById('downloadCSVButton').addEventListener('click', function() {
+    calculateGroupDataCounts().then(() => {
+        console.log("Group data processed and CSV download initiated.");
+    });
+});
+
 function handleFiles(files) {
     if (files.length) {
         Papa.parse(files[0], {
