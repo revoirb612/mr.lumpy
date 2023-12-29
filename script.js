@@ -5,12 +5,15 @@ let numberOfGroups = 0;
 let groupStatistics = []; // 각 그룹별 통계를 저장하기 위한 글로벌 변수
 let allUniqueCounts = {};
 let savedRandomSeeds = [];
+let groups = []; // 전역 그룹 변수
 
 document.getElementById('reviewButton').addEventListener('click', function() {
     let isValid = checkGroupStatisticsValidity();
     let resultText = isValid ? "모든 조건이 만족됩니다." : "일부 조건이 만족되지 않습니다.";
     document.getElementById('reviewResult').textContent = resultText;
 });
+
+document.getElementById('downloadButton').addEventListener('click', downloadCSV); // 다운로드 버튼 이벤트 리스너 추가
 
 function handleFiles(files) {
     if (files.length) {
@@ -168,7 +171,7 @@ function calculateGroupDataCounts() {
         let idealMalePerGroup = Math.round(totalMaleCount / numberOfGroups);
         let idealFemalePerGroup = Math.round(totalFemaleCount / numberOfGroups);
 
-        let groups = Array.from({ length: numberOfGroups }, () => ({ male: [], female: [], total: 0 }));
+        groups = Array.from({ length: numberOfGroups }, () => ({ male: [], female: [], total: 0 }));
 
         // 남성과 여성을 번갈아가며 그룹에 할당
         let maleIndex = 0, femaleIndex = 0;
@@ -195,6 +198,21 @@ function calculateGroupDataCounts() {
         displayGroupStatistics();
         resolve(); // 모든 처리가 완료되면 resolve 호출
     });
+}
+
+function downloadCSV() {
+    let csvData = Papa.unparse(groups.flat()); // groups 데이터를 평평하게 만들고 CSV로 변환
+    let blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    let link = document.createElement("a");
+    if (link.download !== undefined) {
+        let url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "groups.csv");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 }
 
 // 테이블 생성 함수
