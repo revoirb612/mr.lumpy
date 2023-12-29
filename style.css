@@ -35,7 +35,7 @@ body, html {
     line-height: 1.3;            /* 줄 간격 조정 */
 }
 
-#seedInputSection, #groupControls {
+#repeatCount, #seedInputSection, #groupControls {
     display: none;
 }
 
