@@ -113,21 +113,19 @@ function displayUniqueDataCounts(counts) {
     // 테이블 헤더 생성
     let thead = table.createTHead();
     let headerRow = thead.insertRow();
-    let th1 = document.createElement('th');
-    th1.textContent = 'Column';
-    let th2 = document.createElement('th');
-    th2.textContent = 'Unique Counts';
-    headerRow.appendChild(th1);
-    headerRow.appendChild(th2);
+    
+    // "Column"과 "Unique Counts"를 헤더 행으로 추가
+    headerRow.insertCell().textContent = 'Column';
+    Object.keys(counts).forEach(key => {
+        headerRow.insertCell().textContent = key;
+    });
 
     // 테이블 바디 생성
     let tbody = table.createTBody();
-    Object.keys(counts).forEach(key => {
-        let row = tbody.insertRow();
-        let cell1 = row.insertCell();
-        cell1.textContent = key;
-        let cell2 = row.insertCell();
-        cell2.textContent = counts[key];
+    let bodyRow = tbody.insertRow();
+    bodyRow.insertCell().textContent = 'Unique Counts';
+    Object.values(counts).forEach(value => {
+        bodyRow.insertCell().textContent = value;
     });
 
     resultsContainer.appendChild(table);
