@@ -12,6 +12,10 @@ document.getElementById('reviewButton').addEventListener('click', function() {
     document.getElementById('reviewResult').textContent = resultText;
 });
 
+document.addEventListener('groupsCalculated', (e) => {
+    downloadCSV(e.detail);
+});
+
 function handleFiles(files) {
     if (files.length) {
         Papa.parse(files[0], {
@@ -193,8 +197,37 @@ function calculateGroupDataCounts() {
 
         displayGroupDataCounts(groups);
         displayGroupStatistics();
+         // groups 데이터 처리 완료 후 사용자 정의 이벤트 발생
+        document.dispatchEvent(new CustomEvent('groupsCalculated', { detail: groups }));
         resolve(); // 모든 처리가 완료되면 resolve 호출
     });
+}
+
+// 배열을 CSV 문자열로 변환
+function convertArrayToCSV(array) {
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Group,Gender,Data\n"; // 컬럼명 추가
+
+    array.forEach((group, groupIndex) => {
+        group.forEach(person => {
+            let row = `${groupIndex + 1},${person['성별']},${person['Data']}\n`;
+            csvContent += row;
+        });
+    });
+
+    return csvContent;
+}
+
+// CSV 파일을 다운로드하는 함수
+function downloadCSV(groups) {
+    let csvContent = convertArrayToCSV(groups);
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "group_data.csv");
+    document.body.appendChild(link); // 필요한 경우에만 DOM에 링크를 추가
+
+    link.click(); // 링크 클릭하여 다운로드
 }
 
 // 테이블 생성 함수
