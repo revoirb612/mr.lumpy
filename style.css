@@ -2,22 +2,6 @@ body, html {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* 전체 컨테이너 스타일 */
-#orderContainer {
-    background-color: #f2f2f2; /* 배경색 */
-    padding: 20px; /* 여백 */
-    margin-bottom: 15px; /* 하단 마진 */
-    border-radius: 8px; /* 모서리 둥글게 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-}
-
-/* 제목 스타일 */
-#orderContainer h3 {
-    color: #333; /* 글자색 */
-    margin-bottom: 10px; /* 하단 마진 */
-    font-size: 1.2em; /* 글자 크기 */
-}
-
 /* 파일 입력 필드 스타일 */
 input[type="file"] {
     border: 1px solid #ccc; /* 테두리 */
