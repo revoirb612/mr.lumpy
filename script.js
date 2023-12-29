@@ -409,9 +409,9 @@ function checkGroupStatisticsValidity() {
     // 기존에 저장된 데이터와 현재 값의 합 비교
     for (let savedSeed of savedRandomSeeds) {
         let savedSumDifference = 0;
-        for (let key in savedSeed.sumDifferences) {
-            savedSumDifference += savedSeed.sumDifferences[key];
-        }
+        // for (let key in savedSeed.sumDifferences) {
+        savedSumDifference += savedSeed.sumDifferences['지도곤란도'];
+        // }
         if (currentSumDifference >= savedSumDifference) {
             return false; // 현재 합이 저장된 합보다 크거나 같으면 저장하지 않음
         }
