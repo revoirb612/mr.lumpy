@@ -12,11 +12,6 @@ document.getElementById('reviewButton').addEventListener('click', function() {
     document.getElementById('reviewResult').textContent = resultText;
 });
 
-document.getElementById('downloadCSVButton').addEventListener('click', function() {
-    // 사용자가 버튼을 클릭했을 때 CSV 파일 생성 및 다운로드
-    downloadCSV(window.groupsForDownload, 'GroupData.csv');
-});
-
 function handleFiles(files) {
     if (files.length) {
         Papa.parse(files[0], {
@@ -195,43 +190,11 @@ function calculateGroupDataCounts() {
             // 남성과 여성 데이터를 혼합
             groups[i] = groups[i].male.concat(groups[i].female);
         }
-        
+
         displayGroupDataCounts(groups);
         displayGroupStatistics();
-
-        // groups 데이터를 CSV 파일 생성에 적합한 형식으로 변환하여 저장
-        window.groupsForDownload = groups.map(group => 
-            group.map(item => {
-                let transformedItem = {};
-                Object.keys(item).forEach(key => {
-                    transformedItem[key] = item[key].toString();
-                });
-                return transformedItem;
-            })
-        );
-        
         resolve(); // 모든 처리가 완료되면 resolve 호출
     });
-}
-
-// CSV로 변환 및 다운로드 함수
-function downloadCSV(groups, fileName) {
-    // CSV 형태의 문자열로 변환
-    let csvString = Papa.unparse(groups);
-
-    // Blob으로 변환하여 다운로드 링크 생성
-    let blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-    let link = document.createElement("a");
-    if (link.download !== undefined) { // feature detection
-        // HTML5 download attribute를 지원하는 브라우저에서 사용 가능
-        let url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", fileName);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
 }
 
 // 테이블 생성 함수
