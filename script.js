@@ -201,7 +201,18 @@ function calculateGroupDataCounts() {
 }
 
 function downloadCSV() {
-    let csvData = Papa.unparse(groups.flat()); // groups 데이터를 평평하게 만들고 CSV로 변환
+    // 각 데이터에 그룹 번호 추가
+    let combinedData = groups.flatMap((group, groupIndex) => 
+        group.map(data => ({ ...data, Group: groupIndex + 1 }))
+    );
+
+    let csvData = Papa.unparse(combinedData, {
+        quotes: false, // 필요에 따라 true로 설정하여 모든 필드를 따옴표로 묶을 수 있습니다.
+        delimiter: ",", // 구분자 설정
+        header: true, // 헤더 포함
+        newline: "\r\n" // 줄바꿈 문자 설정
+    });
+
     let bom = '\uFEFF'; // UTF-8 BOM 추가
     let blob = new Blob([bom + csvData], { type: 'text/csv;charset=utf-8;' });
     let link = document.createElement("a");
@@ -215,6 +226,7 @@ function downloadCSV() {
         document.body.removeChild(link);
     }
 }
+
 
 // 테이블 생성 함수
 function createGroupTable(group, groupId) {
