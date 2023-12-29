@@ -12,11 +12,9 @@ document.getElementById('reviewButton').addEventListener('click', function() {
     document.getElementById('reviewResult').textContent = resultText;
 });
 
-// CSV 다운로드 버튼 이벤트 리스너
 document.getElementById('downloadCSVButton').addEventListener('click', function() {
-    calculateGroupDataCounts().then(() => {
-        console.log("Group data processed and CSV download initiated.");
-    });
+    // 사용자가 버튼을 클릭했을 때 CSV 파일 생성 및 다운로드
+    downloadCSV(window.groupsForDownload, 'GroupData.csv');
 });
 
 function handleFiles(files) {
@@ -197,12 +195,21 @@ function calculateGroupDataCounts() {
             // 남성과 여성 데이터를 혼합
             groups[i] = groups[i].male.concat(groups[i].female);
         }
-
-        // groups 데이터 생성 후 다운로드 로직 추가
-        downloadCSV(groups.map(group => group.map(item => ({ ...item }))), 'GroupData.csv');
         
         displayGroupDataCounts(groups);
         displayGroupStatistics();
+
+        // groups 데이터를 CSV 파일 생성에 적합한 형식으로 변환하여 저장
+        window.groupsForDownload = groups.map(group => 
+            group.map(item => {
+                let transformedItem = {};
+                Object.keys(item).forEach(key => {
+                    transformedItem[key] = item[key].toString();
+                });
+                return transformedItem;
+            })
+        );
+        
         resolve(); // 모든 처리가 완료되면 resolve 호출
     });
 }
