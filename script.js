@@ -191,10 +191,33 @@ function calculateGroupDataCounts() {
             groups[i] = groups[i].male.concat(groups[i].female);
         }
 
+        // groups 데이터 생성 후 다운로드 로직 추가
+        downloadCSV(groups.map(group => group.map(item => ({ ...item }))), 'GroupData.csv');
+        
         displayGroupDataCounts(groups);
         displayGroupStatistics();
         resolve(); // 모든 처리가 완료되면 resolve 호출
     });
+}
+
+// CSV로 변환 및 다운로드 함수
+function downloadCSV(groups, fileName) {
+    // CSV 형태의 문자열로 변환
+    let csvString = Papa.unparse(groups);
+
+    // Blob으로 변환하여 다운로드 링크 생성
+    let blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    let link = document.createElement("a");
+    if (link.download !== undefined) { // feature detection
+        // HTML5 download attribute를 지원하는 브라우저에서 사용 가능
+        let url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", fileName);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 }
 
 // 테이블 생성 함수
