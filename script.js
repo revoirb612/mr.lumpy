@@ -202,7 +202,8 @@ function calculateGroupDataCounts() {
 
 function downloadCSV() {
     let csvData = Papa.unparse(groups.flat()); // groups 데이터를 평평하게 만들고 CSV로 변환
-    let blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    let bom = '\uFEFF'; // UTF-8 BOM 추가
+    let blob = new Blob([bom + csvData], { type: 'text/csv;charset=utf-8;' });
     let link = document.createElement("a");
     if (link.download !== undefined) {
         let url = URL.createObjectURL(blob);
