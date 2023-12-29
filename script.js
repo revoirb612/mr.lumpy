@@ -115,7 +115,7 @@ function displayUniqueDataCounts(counts) {
     let headerRow = thead.insertRow();
     
     // "Column"과 "Unique Counts"를 헤더 행으로 추가
-    headerRow.insertCell().textContent = 'Column';
+    headerRow.insertCell().textContent = '구분';
     Object.keys(counts).forEach(key => {
         headerRow.insertCell().textContent = key;
     });
@@ -123,7 +123,7 @@ function displayUniqueDataCounts(counts) {
     // 테이블 바디 생성
     let tbody = table.createTBody();
     let bodyRow = tbody.insertRow();
-    bodyRow.insertCell().textContent = 'Unique Counts';
+    bodyRow.insertCell().textContent = '유일값';
     Object.values(counts).forEach(value => {
         bodyRow.insertCell().textContent = value;
     });
