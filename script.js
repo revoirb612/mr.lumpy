@@ -453,7 +453,12 @@ function checkGroupStatisticsValidity() {
 }
 
 async function repeatProcess() {
+    // 입력값을 가져오고, 값이 없거나 NaN이면 기본값으로 50을 설정
     let repeatCount = parseInt(document.getElementById('repeatCount').value);
+    if (isNaN(repeatCount)) {
+        repeatCount = 50;
+    }
+
     for (let i = 0; i < repeatCount; i++) {
         await shuffleDataWithSeed(); // 데이터 셔플 및 완료를 기다림
         await calculateGroupDataCounts(); // 새 그룹 만들기 및 완료를 기다림
