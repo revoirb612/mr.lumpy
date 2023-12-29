@@ -11,20 +11,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 </head>
 <body>
-  <header><h2>Re:Class</h2></header>
+  <header><h1>♾️Re:Class</h2></header>
   <div>
-    <h4>1. 파일 업로드</h2>
+    <h3>1. 파일 업로드</h2>
     <input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
   </div>
   <div id="uniqueCountsContainer"></div>
   <div>
-    <h4>2. 진급반 수 입력</h2>
+    <h3>2. 진급반 수 입력</h2>
     <p>입력된 그룹 수: <span id="inputGroupCount"></span></p>
     <input type="number" id="groupCount" />
     <button onclick="setGroupCount()">입력</button>
   </div>
   <div>
-    <h4>3. 진급반 생성</h2>
+    <h3>3. 진급반 생성</h2>
     <input type="number" id="repeatCount" placeholder="반복 횟수 입력">
     <button onclick="repeatProcess()">반복 실행</button>
     <button id="downloadButton">CSV 다운로드</button>
