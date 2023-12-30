@@ -2,6 +2,14 @@ body, html {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
+/* 모든 body 요소를 가운데 정렬합니다, 단 header와 footer는 제외합니다. */
+body > *:not(header):not(footer) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 #savedSeedsContainer {
     display: flex;
     flex-wrap: wrap;
