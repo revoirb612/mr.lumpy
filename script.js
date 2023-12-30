@@ -15,24 +15,6 @@ document.getElementById('reviewButton').addEventListener('click', function() {
 
 document.getElementById('downloadButton').addEventListener('click', downloadCSV); // 다운로드 버튼 이벤트 리스너 추가
 
-document.getElementById('downloadSampleFile').addEventListener('click', function() {
-    // 서버에서 예시 CSV 파일의 내용을 가져옵니다.
-    // 이 부분은 실제 서버 환경에 따라 달라질 수 있습니다.
-    fetch('example.csv').then(function(response) {
-        return response.text();
-    }).then(function(text) {
-        // Blob 객체를 사용하여 UTF-8 인코딩으로 파일을 생성합니다.
-        var blob = new Blob([text], { type: 'text/csv;charset=utf-8;' });
-        var downloadUrl = URL.createObjectURL(blob);
-
-        // 임시 링크를 생성하여 프로그래밍 방식으로 클릭합니다.
-        var tempLink = document.createElement('a');
-        tempLink.href = downloadUrl;
-        tempLink.setAttribute('download', 'example.csv');
-        tempLink.click();
-    });
-});
-
 function handleFiles(files) {
     if (files.length) {
         Papa.parse(files[0], {
