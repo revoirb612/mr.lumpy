@@ -7,7 +7,6 @@ body > *:not(header):not(footer) {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
 }
 
 #savedSeedsContainer {
