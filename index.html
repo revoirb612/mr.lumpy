@@ -30,6 +30,15 @@
             font-size: 24px;
             margin-right: 20px;
         }
+        .header a {
+            color: #333; /* 링크 색상 */
+            text-decoration: none; /* 밑줄 제거 */
+            margin-right: 15px; /* 오른쪽 여백 */
+            transition: color 0.3s; /* 색상 변경 효과 */
+        }
+        .header a:hover {
+            color: #555; /* 마우스 오버 색상 변경 */
+        }
         .content {
             flex-grow: 1;
             overflow: auto;
@@ -62,14 +71,14 @@
 <body onload="showPage('main/index.html')">
     <div class="header">
         <span>♾️Re:Class</span>
-        <a href="#" onclick="showPage('main/index.html')">링크 1</a> <!-- 하위 폴더의 index.html로 연결 -->
-        <a href="https://acoujin0421.github.io/reclass/" target="iframe">링크 2</a> <!-- 외부 링크로 연결 -->
+        <a href="#" onclick="showPage('main/index.html')">STEP 1</a>
+        <a href="https://acoujin0421.github.io/reclass/" target="iframe">STEP 2</a>
     </div>
     <div class="content">
         <iframe id="iframe" name="iframe" src=""></iframe>
     </div>
     <footer>
-        <p>&copy; 2023 덩어리쌤&홍쌤 All Rights Reserved.</p>
+        <p>&copy; 2023-2024 덩어리쌤&홍쌤 All Rights Reserved.</p>
     </footer>
 
     <script>
