@@ -1,0 +1,58 @@
+body, html {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+#savedSeedsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.seed-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;               /* 패딩 감소 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    flex: 0 0 150px;             /* 폭 감소 */
+    margin-bottom: 10px;
+    height: auto;
+}
+
+.seed-card h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1em;              /* 제목 폰트 크기 감소 */
+    font-weight: bold;
+}
+
+.seed-card p {
+    color: #666;
+    font-size: 0.8em;            /* 문단 폰트 크기 감소 */
+    margin-top: 4px;             /* 상단 여백 감소 */
+    line-height: 1.3;            /* 줄 간격 조정 */
+}
+
+#repeatCount, #seedInputSection, #groupControls {
+    display: none;
+}
+
+/* 페이지 하단의 footer 스타일 */
+footer {
+    position: fixed; /* 고정된 위치 */
+    left: 0; /* 왼쪽 가장자리 */
+    bottom: 0; /* 하단 가장자리 */
+    width: 100%; /* 전체 너비 */
+    background-color: #333; /* 배경색 */
+    color: white; /* 글자색 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+    padding: 10px 0; /* 상하 패딩 */
+}
+
+footer p {
+    margin: 0; /* 마진 제거 */
+    padding: 0; /* 패딩 제거 */
+    font-size: 0.8em; /* 글자 크기 */
+}
