@@ -25,12 +25,12 @@
   </div>
   <div class="card" id="groupCreationContainer">
     <h4>3. 진급반 생성</h4>
+    <div id="seedInputSection">
     <input type="number" id="repeatCount" placeholder="반복 횟수 입력">
     <button onclick="repeatProcess()">진급반 생성(추가)</button>
+    <div id="savedSeedsContainer"></div>
     <button id="downloadButton">CSV 다운로드</button>
   </div>
-  <div id="savedSeedsContainer"></div>
-  <div id="seedInputSection">
     <p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
     <input type="number" id="seedInput" placeholder="랜덤 시드 입력">
     <button onclick="shuffleDataWithSeed()">셔플</button>
