@@ -11,19 +11,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 </head>
 <body>
-  <div id="orderContainer">
+  <div class="card" id="fileUploadContainer">
     <h4>1. 파일 업로드</h4>
     <input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
     <p><a href="example.csv" download="example.csv">예시 파일 다운로드</a></p>
   </div>
   <div id="uniqueCountsContainer"></div>
-  <div id="orderContainer">
+  <div class="card" id="groupInputContainer">
     <h4>2. 진급반 수 입력</h4>
     <input type="number" id="groupCount" />
     <button onclick="setGroupCount()">입력</button>
     <p>입력된 그룹 수: <span id="inputGroupCount"></span></p>
   </div>
-  <div id="orderContainer">
+  <div class="card" id="groupCreationContainer">
     <h4>3. 진급반 생성</h4>
     <input type="number" id="repeatCount" placeholder="반복 횟수 입력">
     <button onclick="repeatProcess()">진급반 생성(추가)</button>
