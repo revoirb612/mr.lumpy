@@ -57,7 +57,7 @@ button:hover {
     padding: 10px;               /* 패딩 감소 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    flex: 0 0 150px;             /* 폭 감소 */
+    flex: 0 0 180px;             /* 폭 감소 */
     margin-bottom: 10px;
     height: auto;
 }
