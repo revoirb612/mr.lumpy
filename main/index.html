@@ -21,17 +21,19 @@
     <h4>2. 진급반 수 입력</h4>
     <input type="number" id="groupCount" />
     <button onclick="setGroupCount()">입력</button>
-    <p>입력된 그룹 수: <span id="inputGroupCount"></span></p>
+    <p>입력된 진급반 수: <span id="inputGroupCount"></span></p>
   </div>
   <div class="card" id="groupCreationContainer">
     <h4>3. 진급반 생성</h4>
+    <p>진급반 생성(추가) 버튼을 클릭하면 동명이인 배제, 반별 총 인원 수 및 남녀 인원 수, 이전 학반이 가급적 균등하게 분배된 학급 카드가 출력됩니다.</p>
+    <p>진급반 생성(추가) 버튼을 누를 때마다 조건을 만족하는 새로운 학급 카드가 출력될 수 있으며 이는 이전 카드보다 통계적으로 우위에 있는 카드입니다.</p>
+    <p>학급 카드를 클릭하면 편성 세부 현황을 확인할 수 있으며 원하는 카드 내용을 csv로 다운로드 받으시면 됩니다.</p>
     <input type="number" id="repeatCount" placeholder="반복 횟수 입력">
     <button onclick="repeatProcess()">진급반 생성(추가)</button>
     <div id="savedSeedsContainer"></div>
     <button id="downloadButton">CSV 다운로드</button>
     <div id="groupStatsContainer"></div>
   </div>
-  
   <div id="seedInputSection">
     <p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
     <input type="number" id="seedInput" placeholder="랜덤 시드 입력">
