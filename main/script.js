@@ -485,7 +485,7 @@ function displaySavedSeeds() {
         let sumDifferencesSection = document.createElement('div');
         for (let key in seedInfo.sumDifferences) {
             let p = document.createElement('p');
-            p.textContent = `${key}: ${seedInfo.sumDifferences[key].toFixed(2)}`;
+            p.textContent = `${key} 최대-최소: ${seedInfo.sumDifferences[key].toFixed(2)}`;
             sumDifferencesSection.appendChild(p);
         }
         card.appendChild(sumDifferencesSection);
