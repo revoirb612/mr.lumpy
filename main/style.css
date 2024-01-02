@@ -41,6 +41,7 @@ input[type="file"], input[type="number"], button {
     border-radius: 5px;
     border: 1px solid #ddd;
     width: calc(100% - 40px); /* 컨테이너 폭에서 마진을 제외한 너비 */
+    box-sizing: border-box; /* 패딩과 테두리 포함 */
 }
 
 button {
@@ -49,6 +50,7 @@ button {
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
+    box-sizing: border-box; /* 패딩과 테두리 포함 */
 }
 
 button:hover {
