@@ -36,7 +36,7 @@ li {
 /* 버튼 및 입력 필드 스타일 업데이트 */
 input[type="file"], input[type="number"], button {
     display: block;
-    margin: 10px 20px 10px 0; /* 상하 마진 10px, 오른쪽 마진 20px, 왼쪽 마진 0px */
+    margin: 10px 0 10px 0; /* 상하 마진 10px, 오른쪽 마진 20px, 왼쪽 마진 0px */
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
