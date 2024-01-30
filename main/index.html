@@ -6,47 +6,70 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
 </head>
 <body>
-  <div class="card" id="fileUploadContainer">
-    <h4>1. 파일 업로드</h4>
-    <input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)">
-    <div id="uniqueCountsContainer"></div>
-    <p><a href="example.csv" download="example.csv">예시 파일 다운로드</a></p>
+  <div class="container mt-4">
+    <div class="card mb-3" id="fileUploadContainer">
+      <div class="card-header">1. 파일 업로드</div>
+      <div class="card-body">
+        <input type="file" id="csvFileInput" accept=".csv" onchange="handleFiles(this.files)" class="form-control-file">
+        <div id="uniqueCountsContainer"></div>
+        <p><a href="example.csv" download="example.csv">예시 파일 다운로드</a></p>
+      </div>
+    </div>
+    <div class="card mb-3" id="groupInputContainer">
+      <div class="card-header">2. 진급반 수 입력</div>
+      <div class="card-body">
+        <input type="number" id="groupCount" class="form-control">
+        <button onclick="setGroupCount()" class="btn btn-primary mt-2">입력</button>
+        <p class="mt-2">입력된 진급반 수: <span id="inputGroupCount"></span></p>
+      </div>
+    </div>
+    <div class="card mb-3" id="groupCreationContainer">
+      <div class="card-header">3. 진급반 생성</div>
+      <div class="card-body">
+        <ul>
+          <li>진급반 생성(추가) 버튼을 클릭하면 동명이인 배제, 반별 총 인원 수 및 남녀 인원 수, 이전 학반이 가급적 균등하게 분배된 학급 카드가 출력됩니다.</li>
+          <li>진급반 생성(추가) 버튼을 누를 때마다 조건을 만족하는 새로운 학급 카드가 출력될 수 있으며 이는 이전 카드보다 통계적으로 우위에 있는 카드입니다.</li>
+          <li>편성 카드를 클릭하면 편성 세부 현황을 확인할 수 있으며 원하는 카드 내용을 csv로 다운로드 받으시면 됩니다.</li>
+        </ul>
+        <input type="number" id="repeatCount" placeholder="반복 횟수 입력" class="form-control">
+        <button onclick="repeatProcess()" class="btn btn-primary mt-2">진급반 생성(추가)</button>
+        <div id="savedSeedsContainer"></div>
+        <button id="downloadButton" class="btn btn-success mt-2">CSV 다운로드</button>
+        <div id="groupStatsContainer"></div>
+      </div>
+    </div>
+    <div id="seedInputSection" class="mb-3">
+      <p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
+      <input type="number" id="seedInput" placeholder="랜덤 시드 입력" class="form-control">
+      <button onclick="shuffleDataWithSeed()" class="btn btn-primary mt-2">셔플</button>
+    </div>
+    <div id="groupControls" class="mb-3">
+      <button onclick="calculateGroupDataCounts()" class="btn btn-primary">새 그룹 만들기</button>
+      <button id="reviewButton" class="btn btn-secondary ml-2">검토하기</button>
+    </div>
+    <div id="reviewResult" class="mb-3">
+      <!-- Review result will be shown here -->
+    </div>
+    <div id="groupCountsContainer" class="mb-3">
+      <!-- Group counts will be shown here -->
+    </div>
   </div>
-  <div class="card" id="groupInputContainer">
-    <h4>2. 진급반 수 입력</h4>
-    <input type="number" id="groupCount" />
-    <button onclick="setGroupCount()">입력</button>
-    <p>입력된 진급반 수: <span id="inputGroupCount"></span></p>
-  </div>
-  <div class="card" id="groupCreationContainer">
-    <h4>3. 진급반 생성</h4>
-    <ul>
-        <li>진급반 생성(추가) 버튼을 클릭하면 동명이인 배제, 반별 총 인원 수 및 남녀 인원 수, 이전 학반이 가급적 균등하게 분배된 학급 카드가 출력됩니다.</li>
-        <li>진급반 생성(추가) 버튼을 누를 때마다 조건을 만족하는 새로운 학급 카드가 출력될 수 있으며 이는 이전 카드보다 통계적으로 우위에 있는 카드입니다.</li>
-        <li>학급 카드를 클릭하면 편성 세부 현황을 확인할 수 있으며 원하는 카드 내용을 csv로 다운로드 받으시면 됩니다.</li>
-    </ul>
-    <input type="number" id="repeatCount" placeholder="반복 횟수 입력">
-    <button onclick="repeatProcess()">진급반 생성(추가)</button>
-    <div id="savedSeedsContainer"></div>
-    <button id="downloadButton">CSV 다운로드</button>
-    <div id="groupStatsContainer"></div>
-  </div>
-  <div id="seedInputSection">
-    <p>사용된 랜덤 시드: <span id="randomSeed"></span></p>
-    <input type="number" id="seedInput" placeholder="랜덤 시드 입력">
-    <button onclick="shuffleDataWithSeed()">셔플</button>
-  </div>
-  <div id="groupControls">
-    <button onclick="calculateGroupDataCounts()">새 그룹 만들기</button>
-    <button id="reviewButton">검토하기</button>
-  </div>
-  <div id="reviewResult"></div>  
-  <div id="groupCountsContainer"></div> <!-- 결과를 표시할 div 추가 -->
+
   <script src="script.js"></script>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
