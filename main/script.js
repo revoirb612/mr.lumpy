@@ -164,7 +164,6 @@ function calculateGroupDataCounts() {
 
         let totalMaleCount = maleData.length;
         let totalFemaleCount = femaleData.length;
-        let totalDataCount = originalData.length;
 
         let idealMalePerGroup = Math.round(totalMaleCount / numberOfGroups);
         let idealFemalePerGroup = Math.round(totalFemaleCount / numberOfGroups);
@@ -173,16 +172,40 @@ function calculateGroupDataCounts() {
 
         // 남성과 여성을 번갈아가며 그룹에 할당
         let maleIndex = 0, femaleIndex = 0;
-        for (let i = 0; i < totalDataCount; i++) {
-            let groupIndex = i % numberOfGroups;
-            if (groups[groupIndex].male.length < idealMalePerGroup && maleIndex < totalMaleCount) {
-                groups[groupIndex].male.push(maleData[maleIndex]);
-                groups[groupIndex].total++;
-                maleIndex++;
-            } else if (femaleIndex < totalFemaleCount) {
-                groups[groupIndex].female.push(femaleData[femaleIndex]);
-                groups[groupIndex].total++;
-                femaleIndex++;
+        let groupIndex = 0;
+
+        if(allUniqueCounts['반'] == numberOfGroups) {
+            // 반 수와 그룹 수가 같을 때의 할당 방식
+            while (maleIndex < totalMaleCount || femaleIndex < totalFemaleCount) {
+                if (groups[groupIndex].male.length < idealMalePerGroup && maleIndex < totalMaleCount) {
+                    groups[groupIndex].male.push(maleData[maleIndex]);
+                    groups[groupIndex].total++;
+                    maleIndex++;
+                } else if (groups[groupIndex].female.length < idealFemalePerGroup && femaleIndex < totalFemaleCount) {
+                    groups[groupIndex].female.push(femaleData[femaleIndex]);
+                    groups[groupIndex].total++;
+                    femaleIndex++;
+                } else {
+                    // 강제로 인덱스 증가
+                    maleIndex++;
+                    femaleIndex++;
+                }
+
+                groupIndex = (groupIndex + 1) % numberOfGroups; // 다음 그룹으로 이동
+            }
+        } else {
+            // 기존 방식
+            for (let i = 0; i < totalDataCount; i++) {
+                let groupIndex = i % numberOfGroups;
+                if (groups[groupIndex].male.length < idealMalePerGroup && maleIndex < totalMaleCount) {
+                    groups[groupIndex].male.push(maleData[maleIndex]);
+                    groups[groupIndex].total++;
+                    maleIndex++;
+                } else if (femaleIndex < totalFemaleCount) {
+                    groups[groupIndex].female.push(femaleData[femaleIndex]);
+                    groups[groupIndex].total++;
+                    femaleIndex++;
+                }
             }
         }
 
