@@ -150,13 +150,29 @@ function cyclicSort(data) {
     return sortedData;
 }
 
-function roundRobinSort(data) {
-    const maxClassNumber = Math.max(...data.map(item => parseInt(item['반'])));
+function roundRobinSortMale(data) {
+    const maxClassNumber = Math.max(...data.map(item => parseInt(item['학업성취도(남)'])));
     const sortedData = [];
     let classNumber = 1;
     
     while (sortedData.length < data.length) {
-        const index = data.findIndex(item => parseInt(item['반']) === classNumber);
+        const index = data.findIndex(item => parseInt(item['학업성취도(남)']) === classNumber);
+        if (index !== -1) {
+            sortedData.push(data[index]);
+            data.splice(index, 1);
+        }
+        classNumber = classNumber % maxClassNumber + 1;
+    }
+    return sortedData;
+}
+
+function roundRobinSortFemale(data) {
+    const maxClassNumber = Math.max(...data.map(item => parseInt(item['학업성취도(여)'])));
+    const sortedData = [];
+    let classNumber = 1;
+    
+    while (sortedData.length < data.length) {
+        const index = data.findIndex(item => parseInt(item['학업성취도(여)']) === classNumber);
         if (index !== -1) {
             sortedData.push(data[index]);
             data.splice(index, 1);
@@ -179,8 +195,8 @@ function calculateGroupDataCounts() {
         let femaleData = randomizedData.filter(row => row['성별'] === '여');
         
         if(allUniqueCounts['반'] == numberOfGroups) {
-            maleData = roundRobinSort(maleData);
-            femaleData = roundRobinSort(femaleData);
+            maleData = roundRobinSortMale(maleData);
+            femaleData = roundRobinSortFemale(femaleData);
         } else {
             maleData = cyclicSort(maleData);
             femaleData = cyclicSort(femaleData);
