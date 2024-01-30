@@ -150,6 +150,22 @@ function cyclicSort(data) {
     return sortedData;
 }
 
+function roundRobinSort(data) {
+    const maxClassNumber = Math.max(...data.map(item => parseInt(item['반'])));
+    const sortedData = [];
+    let classNumber = 1;
+    
+    while (sortedData.length < data.length) {
+        const index = data.findIndex(item => parseInt(item['반']) === classNumber);
+        if (index !== -1) {
+            sortedData.push(data[index]);
+            data.splice(index, 1);
+        }
+        classNumber = classNumber % maxClassNumber + 1;
+    }
+    return sortedData;
+}
+
 function calculateGroupDataCounts() {
     return new Promise(resolve => {
         numberOfGroups = parseInt(document.getElementById('groupCount').value);
@@ -159,8 +175,16 @@ function calculateGroupDataCounts() {
             return;
         }
         
-        let maleData = cyclicSort(randomizedData.filter(row => row['성별'] === '남'));
-        let femaleData = cyclicSort(randomizedData.filter(row => row['성별'] === '여'));
+        let maleData = randomizedData.filter(row => row['성별'] === '남');
+        let femaleData = randomizedData.filter(row => row['성별'] === '여');
+        
+        if(allUniqueCounts['반'] == numberOfGroups) {
+            maleData = roundRobinSort(maleData);
+            femaleData = roundRobinSort(femaleData);
+        } else {
+            maleData = cyclicSort(maleData);
+            femaleData = cyclicSort(femaleData);
+        }
 
         let totalMaleCount = maleData.length;
         let totalFemaleCount = femaleData.length;
@@ -197,7 +221,6 @@ function calculateGroupDataCounts() {
         resolve(); // 모든 처리가 완료되면 resolve 호출
     });
 }
-
 function downloadCSV() {
     // 각 데이터에 그룹 번호 추가
     let combinedData = groups.flatMap((group, groupIndex) => 
