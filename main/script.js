@@ -158,15 +158,9 @@ function calculateGroupDataCounts() {
             resolve(); // 그룹 수가 유효하지 않으면 즉시 resolve 호출
             return;
         }
-        
+
         let maleData = randomizedData.filter(row => row['성별'] === '남');
         let femaleData = randomizedData.filter(row => row['성별'] === '여');
-
-        // '반'의 수와 numberOfGroups의 값이 다를 경우에만 cyclicSort 적용
-        if (allUniqueCounts['반'] !== numberOfGroups) {
-            maleData = cyclicSort(maleData);
-            femaleData = cyclicSort(femaleData);
-        }
 
         let totalMaleCount = maleData.length;
         let totalFemaleCount = femaleData.length;
@@ -177,19 +171,22 @@ function calculateGroupDataCounts() {
 
         groups = Array.from({ length: numberOfGroups }, () => ({ male: [], female: [], total: 0 }));
 
-        // 남성과 여성을 번갈아가며 그룹에 할당
-        let maleIndex = 0, femaleIndex = 0;
-        for (let i = 0; i < totalDataCount; i++) {
-            let groupIndex = i % numberOfGroups;
-            if (groups[groupIndex].male.length < idealMalePerGroup && maleIndex < totalMaleCount) {
-                groups[groupIndex].male.push(maleData[maleIndex]);
-                groups[groupIndex].total++;
-                maleIndex++;
-            } else if (femaleIndex < totalFemaleCount) {
-                groups[groupIndex].female.push(femaleData[femaleIndex]);
-                groups[groupIndex].total++;
-                femaleIndex++;
-            }
+        // 남성과 여성을 랜덤 샘플링하여 그룹에 할당
+        while (maleData.length > 0 || femaleData.length > 0) {
+            groups.forEach(group => {
+                if (group.male.length < idealMalePerGroup && maleData.length > 0) {
+                    let randomIndex = Math.floor(Math.random() * maleData.length);
+                    group.male.push(maleData[randomIndex]);
+                    group.total++;
+                    maleData.splice(randomIndex, 1);
+                }
+                if (group.female.length < idealFemalePerGroup && femaleData.length > 0) {
+                    let randomIndex = Math.floor(Math.random() * femaleData.length);
+                    group.female.push(femaleData[randomIndex]);
+                    group.total++;
+                    femaleData.splice(randomIndex, 1);
+                }
+            });
         }
 
         // 결과를 저장하기 위한 추가된 코드
