@@ -131,7 +131,7 @@ function displayUniqueDataCounts(counts) {
     resultsContainer.appendChild(table);
 }
 
-function cyclicSort(data) {
+function cyclicSort(data, offset) {
     const maxClassNumber = Math.max(...data.map(item => parseInt(item['반'])));
     const sortedData = [];
     let added = true;
@@ -139,7 +139,7 @@ function cyclicSort(data) {
     while (added) {
         added = false;
         for (let i = 1; i <= maxClassNumber; i++) {
-            const index = data.findIndex(item => parseInt(item['반']) === i);
+            const index = data.findIndex(item => parseInt(item['반']) === ((i + offset - 1) % maxClassNumber + 1));
             if (index !== -1) {
                 sortedData.push(data[index]);
                 data.splice(index, 1);
@@ -159,8 +159,14 @@ function calculateGroupDataCounts() {
             return;
         }
         
-        let maleData = cyclicSort(randomizedData.filter(row => row['성별'] === '남'));
-        let femaleData = cyclicSort(randomizedData.filter(row => row['성별'] === '여'));
+        let maleData = randomizedData.filter(row => row['성별'] === '남');
+        let femaleData = randomizedData.filter(row => row['성별'] === '여');
+
+        for (let i = 0; i < numberOfGroups; i++) {
+            // 각 그룹에 대해 시작 지점을 다르게 설정
+            maleData = cyclicSort(maleData, i);
+            femaleData = cyclicSort(femaleData, i);
+        }
 
         let totalMaleCount = maleData.length;
         let totalFemaleCount = femaleData.length;
