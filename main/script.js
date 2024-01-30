@@ -150,36 +150,8 @@ function cyclicSort(data) {
     return sortedData;
 }
 
-function roundRobinSortMale(data) {
-    const maxClassNumber = Math.max(...data.map(item => parseInt(item['학업성취도(남)'])));
-    const sortedData = [];
-    let classNumber = 1;
-    
-    while (sortedData.length < data.length) {
-        const index = data.findIndex(item => parseInt(item['학업성취도(남)']) === classNumber);
-        if (index !== -1) {
-            sortedData.push(data[index]);
-            data.splice(index, 1);
-        }
-        classNumber = classNumber % maxClassNumber + 1;
-    }
-    return sortedData;
-}
-
-function roundRobinSortFemale(data) {
-    const maxClassNumber = Math.max(...data.map(item => parseInt(item['학업성취도(여)'])));
-    const sortedData = [];
-    let classNumber = 1;
-    
-    while (sortedData.length < data.length) {
-        const index = data.findIndex(item => parseInt(item['학업성취도(여)']) === classNumber);
-        if (index !== -1) {
-            sortedData.push(data[index]);
-            data.splice(index, 1);
-        }
-        classNumber = classNumber % maxClassNumber + 1;
-    }
-    return sortedData;
+function ascendingSortByClass(data) {
+    return data.sort((a, b) => parseInt(a['반']) - parseInt(b['반']));
 }
 
 function calculateGroupDataCounts() {
@@ -195,8 +167,8 @@ function calculateGroupDataCounts() {
         let femaleData = randomizedData.filter(row => row['성별'] === '여');
         
         if(allUniqueCounts['반'] == numberOfGroups) {
-            maleData = roundRobinSortMale(maleData);
-            femaleData = roundRobinSortFemale(femaleData);
+            maleData = ascendingSortByClass(maleData);
+            femaleData = ascendingSortByClass(femaleData);
         } else {
             maleData = cyclicSort(maleData);
             femaleData = cyclicSort(femaleData);
@@ -237,6 +209,7 @@ function calculateGroupDataCounts() {
         resolve(); // 모든 처리가 완료되면 resolve 호출
     });
 }
+
 function downloadCSV() {
     // 각 데이터에 그룹 번호 추가
     let combinedData = groups.flatMap((group, groupIndex) => 
