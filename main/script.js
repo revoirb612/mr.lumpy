@@ -150,6 +150,44 @@ function cyclicSort(data) {
     return sortedData;
 }
 
+function cyclicSortMale(data) {
+    const maxClassNumber = Math.max(...data.map(item => parseInt(item['학업성취도(남)'])));
+    const sortedData = [];
+    let added = true;
+
+    while (added) {
+        added = false;
+        for (let i = 1; i <= maxClassNumber; i++) {
+            const index = data.findIndex(item => parseInt(item['학업성취도(남)']) === i);
+            if (index !== -1) {
+                sortedData.push(data[index]);
+                data.splice(index, 1);
+                added = true;
+            }
+        }
+    }
+    return sortedData;
+}
+
+function cyclicSortFemale(data) {
+    const maxClassNumber = Math.max(...data.map(item => parseInt(item['학업성취도(여)'])));
+    const sortedData = [];
+    let added = true;
+
+    while (added) {
+        added = false;
+        for (let i = 1; i <= maxClassNumber; i++) {
+            const index = data.findIndex(item => parseInt(item['학업성취도(여)']) === i);
+            if (index !== -1) {
+                sortedData.push(data[index]);
+                data.splice(index, 1);
+                added = true;
+            }
+        }
+    }
+    return sortedData;
+}
+
 function calculateGroupDataCounts() {
     return new Promise(resolve => {
         numberOfGroups = parseInt(document.getElementById('groupCount').value);
@@ -159,8 +197,17 @@ function calculateGroupDataCounts() {
             return;
         }
         
-        let maleData = cyclicSort(randomizedData.filter(row => row['성별'] === '남'));
-        let femaleData = cyclicSort(randomizedData.filter(row => row['성별'] === '여'));
+        let maleData = randomizedData.filter(row => row['성별'] === '남');
+        let femaleData = randomizedData.filter(row => row['성별'] === '여');
+
+        // '반'의 수와 numberOfGroups의 값이 다를 경우에만 cyclicSort 적용
+        if (allUniqueCounts['반'] !== numberOfGroups) {
+            maleData = cyclicSort(maleData);
+            femaleData = cyclicSort(femaleData);
+        } else if (allUniqueCounts['반'] == numberOfGroups) {
+            maleData = cyclicSort2(maleData);
+            femaleData = cyclicSort3(femaleData);
+        }
 
         let totalMaleCount = maleData.length;
         let totalFemaleCount = femaleData.length;
