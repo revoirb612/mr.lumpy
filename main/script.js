@@ -205,8 +205,8 @@ function calculateGroupDataCounts() {
             maleData = cyclicSort(maleData);
             femaleData = cyclicSort(femaleData);
         } else if (allUniqueCounts['반'] == numberOfGroups) {
-            maleData = cyclicSortMale(maleData);
-            femaleData = cyclicSortFemale(femaleData);
+            maleData = cyclicSort2(maleData);
+            femaleData = cyclicSort3(femaleData);
         }
 
         let totalMaleCount = maleData.length;
