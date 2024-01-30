@@ -6,15 +6,6 @@ body {
     background-color: #f4f4f4;
 }
 
-/* 카드 스타일 */
-.card {
-    background-color: #fff;
-    margin: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 /* 제목 스타일 업데이트 */
 h4 {
     font-size: 1.5em; /* 더 큰 글자 크기 */
