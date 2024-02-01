@@ -358,15 +358,13 @@ function displayGroupStatistics() {
 
     // 테이블 헤더 생성
     let thead = table.createTHead();
+    let headerRow = thead.insertRow();
+    let th = document.createElement('th'); // 공란의 헤더 생성
+    headerRow.appendChild(th);
     groupStatistics.forEach((groupStat, index) => {
-        let th = document.createElement('th');
+        th = document.createElement('th');
         th.textContent = groupStat.groupId;
-        if (thead.rows[0]) {
-            thead.rows[0].appendChild(th);
-        } else {
-            let headerRow = thead.insertRow();
-            headerRow.appendChild(th);
-        }
+        headerRow.appendChild(th);
     });
 
     // 테이블 바디 생성
