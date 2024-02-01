@@ -344,16 +344,6 @@ function displayGroupStatistics() {
     let table = document.createElement('table');
     table.border = '1';
 
-    // 테이블 헤더 생성
-    let thead = table.createTHead();
-    let headerRow = thead.insertRow();
-    let baseHeaders = ['Group ID', 'Total', 'Male Count', 'Female Count'];
-    baseHeaders.forEach(header => {
-        let th = document.createElement('th');
-        th.textContent = header;
-        headerRow.appendChild(th);
-    });
-
     // 모든 그룹의 유니크 데이터, 그리고 SUM 키 수집
     let uniqueDataKeys = new Set();
     let sumKeys = new Set();
@@ -366,45 +356,35 @@ function displayGroupStatistics() {
         });
     });
 
-    // 유니크 데이터, 그리고 SUM 키를 헤더로 추가
-    uniqueDataKeys.forEach(key => {
+    // 테이블 헤더 생성
+    let thead = table.createTHead();
+    let baseHeaders = ['Group ID', 'Total', 'Male Count', 'Female Count', ...Array.from(uniqueDataKeys), ...Array.from(sumKeys)];
+    baseHeaders.forEach(header => {
+        let row = thead.insertRow();
         let th = document.createElement('th');
-        th.textContent = `${key} Unique`;
-        headerRow.appendChild(th);
-    });
-    sumKeys.forEach(key => {
-        let th = document.createElement('th');
-        th.textContent = `${key} Sum`;
-        headerRow.appendChild(th);
+        th.textContent = header;
+        row.appendChild(th);
     });
 
     // 테이블 바디 생성
     let tbody = table.createTBody();
     groupStatistics.forEach(groupStat => {
-        let row = tbody.insertRow();
-
-        let cell = row.insertCell();
-        cell.textContent = groupStat.groupId;
-
-        cell = row.insertCell();
-        cell.textContent = groupStat.total;
-
-        cell = row.insertCell();
-        cell.textContent = groupStat.maleCount;
-
-        cell = row.insertCell();
-        cell.textContent = groupStat.femaleCount;
+        let baseValues = [groupStat.groupId, groupStat.total, groupStat.maleCount, groupStat.femaleCount];
 
         // 유니크 데이터 값 추가
         uniqueDataKeys.forEach(key => {
-            cell = row.insertCell();
-            cell.textContent = groupStat.uniqueCounts[key] ? groupStat.uniqueCounts[key] : 'N/A';
+            baseValues.push(groupStat.uniqueCounts[key] ? groupStat.uniqueCounts[key] : 'N/A');
         });
 
         // SUM 값 추가
         sumKeys.forEach(key => {
-            cell = row.insertCell();
-            cell.textContent = groupStat.sums[key] ? groupStat.sums[key].toFixed(2) : 'N/A';
+            baseValues.push(groupStat.sums[key] ? groupStat.sums[key].toFixed(2) : 'N/A');
+        });
+
+        baseValues.forEach(value => {
+            let row = tbody.insertRow();
+            let cell = row.insertCell();
+            cell.textContent = value;
         });
     });
 
