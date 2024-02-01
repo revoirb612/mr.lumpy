@@ -358,17 +358,17 @@ function displayGroupStatistics() {
 
     // 테이블 헤더 생성
     let thead = table.createTHead();
+    let headerRow = thead.insertRow();
     let baseHeaders = ['Group ID', 'Total', 'Male Count', 'Female Count', ...Array.from(uniqueDataKeys), ...Array.from(sumKeys)];
     baseHeaders.forEach(header => {
-        let row = thead.insertRow();
         let th = document.createElement('th');
         th.textContent = header;
-        row.appendChild(th);
+        headerRow.appendChild(th);
     });
 
     // 테이블 바디 생성
     let tbody = table.createTBody();
-    groupStatistics.forEach(groupStat => {
+    groupStatistics.forEach((groupStat, index) => {
         let baseValues = [groupStat.groupId, groupStat.total, groupStat.maleCount, groupStat.femaleCount];
 
         // 유니크 데이터 값 추가
@@ -381,9 +381,14 @@ function displayGroupStatistics() {
             baseValues.push(groupStat.sums[key] ? groupStat.sums[key].toFixed(2) : 'N/A');
         });
 
-        baseValues.forEach(value => {
-            let row = tbody.insertRow();
-            let cell = row.insertCell();
+        baseValues.forEach((value, valueIndex) => {
+            let row;
+            if(tbody.rows[valueIndex]) {
+                row = tbody.rows[valueIndex];
+            } else {
+                row = tbody.insertRow();
+            }
+            let cell = row.insertCell(index);
             cell.textContent = value;
         });
     });
