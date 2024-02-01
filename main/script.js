@@ -358,18 +358,23 @@ function displayGroupStatistics() {
 
     // 테이블 헤더 생성
     let thead = table.createTHead();
-    let headerRow = thead.insertRow();
-    let baseHeaders = ['Group ID', 'Total', 'Male Count', 'Female Count', ...Array.from(uniqueDataKeys), ...Array.from(sumKeys)];
-    baseHeaders.forEach(header => {
+    let baseHeaders = ['Total', 'Male Count', 'Female Count', ...Array.from(uniqueDataKeys), ...Array.from(sumKeys)];
+    baseHeaders.forEach((header, index) => {
+        let row;
+        if (thead.rows[index]) {
+            row = thead.rows[index];
+        } else {
+            row = thead.insertRow();
+        }
         let th = document.createElement('th');
         th.textContent = header;
-        headerRow.appendChild(th);
+        row.appendChild(th);
     });
 
     // 테이블 바디 생성
     let tbody = table.createTBody();
     groupStatistics.forEach((groupStat, index) => {
-        let baseValues = [groupStat.groupId, groupStat.total, groupStat.maleCount, groupStat.femaleCount];
+        let baseValues = [groupStat.total, groupStat.maleCount, groupStat.femaleCount];
 
         // 유니크 데이터 값 추가
         uniqueDataKeys.forEach(key => {
@@ -381,14 +386,18 @@ function displayGroupStatistics() {
             baseValues.push(groupStat.sums[key] ? groupStat.sums[key].toFixed(2) : 'N/A');
         });
 
+        let row;
+        if (tbody.rows[index]) {
+            row = tbody.rows[index];
+        } else {
+            row = tbody.insertRow();
+        }
+
+        let cell = row.insertCell();
+        cell.textContent = groupStat.groupId;
+
         baseValues.forEach((value, valueIndex) => {
-            let row;
-            if(tbody.rows[valueIndex]) {
-                row = tbody.rows[valueIndex];
-            } else {
-                row = tbody.insertRow();
-            }
-            let cell = row.insertCell(index);
+            let cell = row.insertCell();
             cell.textContent = value;
         });
     });
